@@ -24,10 +24,30 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,\n                                    HttpServletResponse response,\n                                    FilterChain filterChain)\n            throws ServletException, IOException {\n
-        String authHeader = request.getHeader("Authorization");\n
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {\n            filterChain.doFilter(request, response);\n            return;\n        }\n
-        String token = authHeader.substring(7);\n
-        try {\n            Claims claims = jwtService.extractClaims(token);\n            String email = claims.getSubject();\n            String role = claims.get("role", String.class);\n
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {\n                UsernamePasswordAuthenticationToken authentication =\n                        new UsernamePasswordAuthenticationToken(\n                                email,\n                                null,\n                                List.of(new SimpleGrantedAuthority("ROLE_" + role))\n                        );\n                SecurityContextHolder.getContext().setAuthentication(authentication);\n            }\n
-        } catch (Exception e) {\n            System.out.println("JWT ERROR: " + e.getClass().getName() + " - " + e.getMessage());\n            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);\n            return;\n        }\n
-        filterChain.doFilter(request, response);\n    }\n}
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String token = authHeader.substring(7);
+
+        try {
+            Claims claims = jwtService.extractClaims(token);
+            String email = claims.getSubject();
+            String role = claims.get("role", String.class);
+
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UsernamePasswordAuthenticationToken authentication =\n                        new UsernamePasswordAuthenticationToken(\n                                email,\n                                null,\n                                List.of(new SimpleGrantedAuthority("ROLE_" + role))\n                        );\n                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+
+        } catch (Exception e) {
+            System.out.println("JWT ERROR: " + e.getClass().getName() + " - " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        filterChain.doFilter(request, response);
+    }
+}
