@@ -28,7 +28,7 @@ public class Project {
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
-    private Long clientId; // référence au client dans user-service
+    private String clientId; // référence au client dans user-service
 
     private LocalDateTime createdAt;
 

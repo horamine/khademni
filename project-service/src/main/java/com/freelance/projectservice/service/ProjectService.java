@@ -13,7 +13,8 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
 
-    public Project createProject(Project project) {
+    public Project createProject(Project project, String clientEmail) {
+        project.setClientId(clientEmail);
         return projectRepository.save(project);
     }
 

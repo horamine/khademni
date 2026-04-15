@@ -4,6 +4,7 @@ import com.freelance.projectservice.entity.Project;
 import com.freelance.projectservice.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -15,8 +16,9 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
-        return ResponseEntity.ok(projectService.createProject(project));
+    public ResponseEntity<Project> createProject(@RequestBody Project project, Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(projectService.createProject(project, email));
     }
 
     @GetMapping
