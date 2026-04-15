@@ -2,8 +2,6 @@ package com.example.userservice.security;
 
 import com.example.userservice.service.JwtService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,17 +42,19 @@ public class JwtFilter extends OncePerRequestFilter {
             String email = claims.getSubject();
             String role = claims.get("role", String.class);
 
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            email,
-                            null,
-                            List.of(new SimpleGrantedAuthority("ROLE_" + role))
-                    );
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                email,
+                                null,
+                                List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                        );
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
 
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            // Invalid token - just continue without authentication
+            filterChain.doFilter(request, response);
             return;
         }
 
