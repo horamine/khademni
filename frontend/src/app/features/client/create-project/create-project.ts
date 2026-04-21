@@ -38,7 +38,7 @@ export class CreateProjectComponent {
       title: raw.title!,
       description: raw.description!,
       budget: raw.budget!,
-      requiredSkills: raw.requiredSkills ? raw.requiredSkills.split(',').map((s: string) => s.trim()).filter((s: string) => s) : []
+      requiredSkills: this.parseSkills(raw.requiredSkills ?? '')
     };
     this.projectService.create(project).subscribe({
       next: () => {
@@ -51,5 +51,9 @@ export class CreateProjectComponent {
         this.snackBar.open('Failed to create project. Please try again.', 'Close', { duration: 4000 });
       }
     });
+  }
+
+  private parseSkills(skillsString: string): string[] {
+    return skillsString.split(',').map((s) => s.trim()).filter((s) => s.length > 0);
   }
 }
