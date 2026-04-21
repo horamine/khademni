@@ -1,0 +1,11 @@
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+.stat-card mat-card-content {
+  text-align: center;
+  mat-icon { font-size: 36px; height: 36px; width: 36px; }
+  .stat-value { font-size: 2rem; font-weight: 700; }
+  .stat-label { color: #666; font-size: 0.85rem; }
+}

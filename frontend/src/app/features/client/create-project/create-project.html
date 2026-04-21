@@ -1,0 +1,43 @@
+<h1>Create Project</h1>
+<mat-card style="max-width:600px;">
+  <mat-card-header>
+    <mat-card-title>New Project</mat-card-title>
+    <mat-card-subtitle>Fill in the details to post your project</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="project-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Project Title</mat-label>
+        <input matInput formControlName="title" placeholder="e.g. Build a REST API" />
+        @if (form.get('title')?.hasError('required')) {
+          <mat-error>Title is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="4" placeholder="Describe what you need..."></textarea>
+        @if (form.get('description')?.hasError('required')) {
+          <mat-error>Description is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Budget (USD)</mat-label>
+        <input matInput type="number" formControlName="budget" placeholder="e.g. 500" />
+        @if (form.get('budget')?.hasError('required')) {
+          <mat-error>Budget is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Required Skills (comma-separated)</mat-label>
+        <input matInput formControlName="requiredSkills" placeholder="e.g. Java, Spring Boot, Angular" />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="loading()" class="full-width">
+        Post Project
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>
