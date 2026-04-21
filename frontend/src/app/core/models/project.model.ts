@@ -11,6 +11,7 @@ export interface Project {
   requiredSkills: string[];
   budget: number;
   status?: ProjectStatus;
+  // Note: backend stores clientId as String (email-based reference to user-service)
   clientId?: string;
   createdAt?: string;
 }
