@@ -8,17 +8,17 @@ spring:
     gateway:
       routes:
         - id: user-service
-          uri: http://user-service:8081        # ← use service name, not localhost
+          uri: http://localhost:8081
           predicates:
             - Path=/api/auth/**, /api/users/**, /api/freelancers/**, /api/clients/**
 
         - id: project-service
-          uri: http://project-service:8082     # ← use service name, not localhost
+          uri: http://localhost:8082
           predicates:
             - Path=/api/projects/**
 
         - id: application-service
-          uri: http://application-service:8083 # ← use service name, not localhost
+          uri: http://localhost:8083
           predicates:
             - Path=/api/applications/**
 

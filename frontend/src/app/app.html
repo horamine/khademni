@@ -1,0 +1,34 @@
+<mat-toolbar color="primary">
+  <mat-icon>work</mat-icon>
+  <span style="margin-left: 8px;">{{ title() }}</span>
+  <span style="flex: 1 1 auto;"></span>
+  <button mat-button>
+    <mat-icon>login</mat-icon>
+    Login
+  </button>
+  <button mat-flat-button color="accent">
+    <mat-icon>person_add</mat-icon>
+    Register
+  </button>
+</mat-toolbar>
+
+<main style="padding: 40px; display: flex; justify-content: center;">
+  <mat-card style="max-width: 500px;">
+    <mat-card-header>
+      <mat-card-title>Welcome to Khademni 👋</mat-card-title>
+      <mat-card-subtitle>The freelance platform that connects talents</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content style="margin-top: 16px;">
+      <p>Angular Material is working! 🎉</p>
+      <p>Next step: we'll add routing, login, and all the pages.</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary">
+        <mat-icon>rocket_launch</mat-icon>
+        Get started
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</main>
+
+<router-outlet />
