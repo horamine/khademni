@@ -6,6 +6,7 @@ import com.example.userservice.dto.RegisterRequest;
 import com.example.userservice.entity.Client;
 import com.example.userservice.entity.Freelancer;
 import com.example.userservice.entity.Role;
+import com.example.userservice.exception.EmailAlreadyUsedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.userservice.entity.User;
 import com.example.userservice.repository.UserRepository;
@@ -23,7 +24,7 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email déjà utilisé !");
+            throw new EmailAlreadyUsedException();
         }
 
         Role role = Role.valueOf(request.getRole().toUpperCase());
