@@ -31,7 +31,28 @@ public class ProjectService {
                 .orElseThrow(() -> new RuntimeException("Projet non trouvé !"));
     }
 
-    public List<Project> getProjectsByClient(Long clientId) {
-        return projectRepository.findByClientId(clientId);
+    public List<Project> getProjectsByClientEmail(String clientEmail) {
+        return projectRepository.findByClientId(clientEmail);
+    }
+
+    public Project updateProject(Long id, Project updated, String clientEmail) {
+        Project existing = getProjectById(id);
+        // TODO: enforce owner-only
+        existing.setTitle(updated.getTitle());
+        existing.setDescription(updated.getDescription());
+        existing.setRequiredSkills(updated.getRequiredSkills());
+        existing.setBudget(updated.getBudget());
+        return projectRepository.save(existing);
+    }
+
+    public void deleteProject(Long id, String clientEmail) {
+        // TODO: enforce owner-only
+        projectRepository.deleteById(id);
+    }
+
+    public Project updateProjectStatus(Long id, String status) {
+        Project project = getProjectById(id);
+        project.setStatus(ProjectStatus.valueOf(status.toUpperCase()));
+        return projectRepository.save(project);
     }
 }
