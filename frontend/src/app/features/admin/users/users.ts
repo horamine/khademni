@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../core/services/user.service';
 import { User, Role } from '../../../core/models/user.model';
 
@@ -26,7 +26,7 @@ import { User, Role } from '../../../core/models/user.model';
 })
 export class AdminUsersComponent implements OnInit {
   private readonly userService = inject(UserService);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly toastr = inject(ToastrService);
 
   readonly loading = signal(true);
   readonly deletingId = signal<number | null>(null);
@@ -72,11 +72,11 @@ export class AdminUsersComponent implements OnInit {
         this.users.update(us => us.filter(u => u.id !== user.id));
         this.applyFilters();
         this.deletingId.set(null);
-        this.snackBar.open('Utilisateur supprimé.', 'Fermer', { duration: 3000 });
+        this.toastr.success('Utilisateur supprimé.');
       },
       error: () => {
         this.deletingId.set(null);
-        this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 4000 });
+        this.toastr.error('Erreur lors de la suppression.');
       }
     });
   }
@@ -92,6 +92,6 @@ export class AdminUsersComponent implements OnInit {
 
   // TODO: Block user functionality (requires backend support)
   blockUser(user: User): void {
-    this.snackBar.open('Fonctionnalité de blocage non disponible (TODO backend).', 'Fermer', { duration: 3000 });
+    this.toastr.success('Fonctionnalité de blocage non disponible (TODO backend).');
   }
 }

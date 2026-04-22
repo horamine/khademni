@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../core/services/user.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Freelancer } from '../../../core/models/user.model';
@@ -26,7 +26,7 @@ import { Freelancer } from '../../../core/models/user.model';
 export class FreelancerProfileComponent implements OnInit {
   private readonly userService = inject(UserService);
   private readonly authService = inject(AuthService);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly toastr = inject(ToastrService);
   private readonly fb = inject(FormBuilder);
 
   readonly loading = signal(true);
@@ -79,11 +79,11 @@ export class FreelancerProfileComponent implements OnInit {
       next: (updated) => {
         this.freelancer.set(updated);
         this.saving.set(false);
-        this.snackBar.open('Profil mis à jour !', 'Fermer', { duration: 3000 });
+        this.toastr.success('Profil mis à jour !');
       },
       error: () => {
         this.saving.set(false);
-        this.snackBar.open('Erreur lors de la sauvegarde.', 'Fermer', { duration: 4000 });
+        this.toastr.error('Erreur lors de la sauvegarde.');
       }
     });
   }

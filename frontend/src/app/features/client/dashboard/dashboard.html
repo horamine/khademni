@@ -2,85 +2,104 @@
   <div class="page-header">
     <h1 class="page-title">
       <mat-icon>dashboard</mat-icon>
-      Tableau de bord Client
+      {{ 'DASHBOARD.CLIENT_TITLE' | translate }}
     </h1>
-    <a mat-raised-button color="primary" routerLink="/client/create-project">
+    <a mat-raised-button routerLink="/client/create-project" class="header-cta">
       <mat-icon>add</mat-icon>
-      Nouveau projet
+      {{ 'DASHBOARD.NEW_PROJECT' | translate }}
     </a>
   </div>
 
   @if (loading()) {
     <div class="loading-center">
-      <mat-spinner diameter="48"></mat-spinner>
+      <mat-spinner diameter="48" style="color: var(--primary)"></mat-spinner>
     </div>
   } @else {
-    <!-- Stats Grid -->
+    <!-- KPI Cards -->
     <div class="stats-grid">
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background: linear-gradient(135deg,#FF6B35,#e05a2a)">
-            <mat-icon>folder_open</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ totalProjects }}</div>
-            <div class="stat-label">Total projets</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: linear-gradient(135deg,#FF6B35,#e05a2a)">
+          <mat-icon>folder_open</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ totalProjects }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.TOTAL_PROJECTS' | translate }}</div>
+        </div>
+      </div>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background: linear-gradient(135deg,#00B894,#009d7e)">
-            <mat-icon>pending_actions</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ openProjects }}</div>
-            <div class="stat-label">Projets ouverts</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: linear-gradient(135deg,#00B894,#009d7e)">
+          <mat-icon>pending_actions</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ openProjects }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.OPEN_PROJECTS' | translate }}</div>
+        </div>
+      </div>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background: linear-gradient(135deg,#004E89,#003a6b)">
-            <mat-icon>construction</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ inProgressProjects }}</div>
-            <div class="stat-label">En cours</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: linear-gradient(135deg,#004E89,#003a6b)">
+          <mat-icon>construction</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ inProgressProjects }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.IN_PROGRESS' | translate }}</div>
+        </div>
+      </div>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background: linear-gradient(135deg,#636E72,#4a5568)">
-            <mat-icon>check_circle</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ closedProjects }}</div>
-            <div class="stat-label">Terminés</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background: linear-gradient(135deg,#636E72,#4a5568)">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ closedProjects }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.COMPLETED' | translate }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">{{ 'DASHBOARD.CHART_PROJECTS_TIME' | translate }}</div>
+        <div class="chart-subtitle">{{ 'DASHBOARD.DEMO_DATA' | translate }}</div>
+        <div style="height:200px">
+          <canvas baseChart
+            [data]="lineChartData"
+            [options]="lineChartOptions"
+            type="line">
+          </canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">{{ 'DASHBOARD.CHART_APP_STATUS' | translate }}</div>
+        <div class="chart-subtitle">{{ totalProjects }} {{ 'DASHBOARD.TOTAL_PROJECTS' | translate | lowercase }}</div>
+        <div style="height:200px">
+          <canvas baseChart
+            [data]="donutChartData"
+            [options]="donutChartOptions"
+            type="doughnut">
+          </canvas>
+        </div>
+      </div>
     </div>
 
     <!-- Recent Projects -->
     <mat-card class="recent-card">
       <mat-card-header>
-        <mat-card-title>Projets récents</mat-card-title>
-        <mat-card-subtitle>Vos derniers projets publiés</mat-card-subtitle>
+        <mat-card-title>{{ 'DASHBOARD.RECENT_PROJECTS' | translate }}</mat-card-title>
+        <mat-card-subtitle>{{ 'DASHBOARD.RECENT_PROJECTS_SUB' | translate }}</mat-card-subtitle>
         <div class="header-actions">
-          <a mat-button routerLink="/client/projects">Voir tout</a>
+          <a mat-button routerLink="/client/projects">{{ 'DASHBOARD.VIEW_ALL' | translate }}</a>
         </div>
       </mat-card-header>
       <mat-card-content>
         @if (recentProjects().length === 0) {
           <div class="empty-state">
             <mat-icon>folder_off</mat-icon>
-            <p>Aucun projet pour l'instant.</p>
-            <a mat-raised-button color="primary" routerLink="/client/create-project">Créer mon premier projet</a>
+            <p>{{ 'DASHBOARD.EMPTY_PROJECTS' | translate }}</p>
+            <a mat-raised-button routerLink="/client/create-project">{{ 'DASHBOARD.EMPTY_PROJECTS_CTA' | translate }}</a>
           </div>
         } @else {
           <div class="projects-list">
@@ -109,24 +128,25 @@
     <!-- Quick Actions -->
     <mat-card class="actions-card">
       <mat-card-header>
-        <mat-card-title>Actions rapides</mat-card-title>
+        <mat-card-title>{{ 'DASHBOARD.QUICK_ACTIONS' | translate }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="quick-actions">
-          <a mat-raised-button color="primary" routerLink="/client/create-project">
+          <a mat-raised-button routerLink="/client/create-project" class="action-primary">
             <mat-icon>add_circle</mat-icon>
-            Créer un projet
+            {{ 'DASHBOARD.NEW_PROJECT' | translate }}
           </a>
           <a mat-stroked-button routerLink="/client/projects">
             <mat-icon>list</mat-icon>
-            Mes projets
+            {{ 'DASHBOARD.MY_PROJECTS' | translate }}
           </a>
           <a mat-stroked-button routerLink="/client/freelancers">
             <mat-icon>people</mat-icon>
-            Trouver des freelancers
+            {{ 'DASHBOARD.FIND_FREELANCERS' | translate }}
           </a>
         </div>
       </mat-card-content>
     </mat-card>
   }
 </div>
+

@@ -1,66 +1,8 @@
-.dashboard-container {
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
+/* Admin dashboard uses global styles */
+.action-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, #e05a2a 100%) !important;
+  color: white !important;
+  border-radius: var(--radius-md) !important;
+  font-weight: 600 !important;
 }
 
-.page-header {
-  margin-bottom: 24px;
-  .page-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #FF6B35;
-  }
-}
-
-.loading-center {
-  display: flex;
-  justify-content: center;
-  padding: 60px 0;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.stat-card {
-  mat-card-content {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 20px !important;
-  }
-
-  .stat-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    mat-icon { color: white; font-size: 28px; height: 28px; width: 28px; }
-  }
-
-  .stat-info {
-    .stat-value { font-size: 2rem; font-weight: 800; line-height: 1; }
-    .stat-label { font-size: 0.85rem; color: #636e72; margin-top: 4px; }
-  }
-}
-
-.admin-actions {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-}
-
-.action-card {
-  mat-card-actions { padding: 16px; }
-}

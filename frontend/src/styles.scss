@@ -1,39 +1,534 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+/* ─── Google Fonts are loaded via index.html ─── */
+
+/* ─── Sahara Sunset Design System ─── */
+
+:root {
+  /* Brand colors */
+  --primary: #FF6B35;
+  --primary-dark: #e05a2a;
+  --primary-light: #ff8a5c;
+  --secondary: #004E89;
+  --secondary-dark: #003a6b;
+  --secondary-light: #1565c0;
+  --accent: #F7C59F;
+
+  /* Semantic colors */
+  --success: #00B894;
+  --warning: #FDCB6E;
+  --error: #E74C3C;
+  --info: #0984e3;
+
+  /* Light theme */
+  --bg: #FAFAFA;
+  --surface: #FFFFFF;
+  --surface-2: #F5F5F5;
+  --text: #0F1419;
+  --text-muted: #636E72;
+  --border: #E2E8F0;
+  --shadow: rgba(0, 0, 0, 0.08);
+  --shadow-md: rgba(0, 0, 0, 0.14);
+  --shadow-lg: rgba(0, 0, 0, 0.22);
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  /* Typography */
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-arabic: 'Cairo', sans-serif;
+
+  /* Sidebar */
+  --sidebar-width: 256px;
+  --sidebar-collapsed: 68px;
+
+  /* Transitions */
+  --transition: all 0.2s ease;
+  --transition-slow: all 0.35s ease;
+}
+
+[data-theme="dark"] {
+  --bg: #0F1419;
+  --surface: #1A2028;
+  --surface-2: #232b36;
+  --text: #F5F5F5;
+  --text-muted: #9ba3af;
+  --border: #2d3748;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --shadow-md: rgba(0, 0, 0, 0.5);
+  --shadow-lg: rgba(0, 0, 0, 0.7);
+}
+
+/* ─── Material Theme ─── */
 html {
   height: 100%;
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
+
+  @include mat.theme((
+    color: (
+      primary: mat.$orange-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Inter,
+    density: 0,
+  ));
+}
+
+/* ─── Base Reset ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
   margin: 0;
   height: 100%;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color-scheme: light;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
-/* You can add global styles to this file, and also import other style files */
+
+[data-theme="dark"] body {
+  color-scheme: dark;
+}
+
+[dir="rtl"] body {
+  font-family: var(--font-arabic);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6 {
+  font-family: var(--font-arabic);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s;
+  &:hover { color: var(--primary-dark); }
+}
+
+/* ─── Utility Classes ─── */
+
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .glass {
+  background: rgba(26, 32, 40, 0.7);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.gradient-sahara {
+  background: linear-gradient(135deg, var(--primary) 0%, #FF8A5C 50%, var(--secondary) 100%);
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px var(--shadow-md) !important;
+  }
+}
+
+/* Shimmer skeleton loader */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--border) 50%, var(--surface-2) 75%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+  border-radius: var(--radius-sm);
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* ─── Route transitions ─── */
+router-outlet + * {
+  animation: fadeInUp 0.15s ease forwards;
+}
+
+/* Button micro-interactions */
+button:active:not([disabled]),
+a[mat-raised-button]:active,
+a[mat-flat-button]:active {
+  transform: scale(0.98);
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+  &:hover { background: var(--text-muted); }
+}
+
+/* ─── Material Overrides ─── */
+.mat-mdc-card {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 2px 8px var(--shadow) !important;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+/* ─── Status chips ─── */
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+
+  &.open    { background: rgba(0, 184, 148, 0.15); color: #00B894; }
+  &.in_progress { background: rgba(255, 107, 53, 0.15); color: #FF6B35; }
+  &.closed,
+  &.completed { background: rgba(99, 110, 114, 0.15); color: #636E72; }
+  &.cancelled { background: rgba(231, 76, 60, 0.12); color: #E74C3C; }
+  &.pending   { background: rgba(253, 203, 110, 0.2); color: #c9a030; }
+  &.accepted  { background: rgba(0, 184, 148, 0.15); color: #00B894; }
+  &.rejected  { background: rgba(231, 76, 60, 0.12); color: #E74C3C; }
+}
+
+/* ─── Skill tag ─── */
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  background: rgba(255, 107, 53, 0.1);
+  color: var(--primary);
+  border: 1px solid rgba(255, 107, 53, 0.2);
+  margin: 2px;
+  transition: var(--transition);
+
+  &:hover { background: rgba(255, 107, 53, 0.2); }
+}
+
+/* ─── KPI Card ─── */
+.kpi-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px var(--shadow-md);
+  }
+
+  .kpi-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    mat-icon { color: white; font-size: 24px; width: 24px; height: 24px; }
+  }
+
+  .kpi-info {
+    flex: 1;
+    .kpi-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: var(--font-heading);
+      color: var(--text);
+      line-height: 1;
+      animation: countUp 0.5s ease;
+    }
+    .kpi-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+  }
+}
+
+/* ─── Dashboard container ─── */
+.dashboard-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeInUp 0.3s ease;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  .page-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    font-family: var(--font-heading);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    mat-icon {
+      color: var(--primary);
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.chart-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  padding: 20px;
+  box-shadow: 0 2px 8px var(--shadow);
+
+  .chart-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-family: var(--font-heading);
+  }
+
+  .chart-subtitle {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  canvas { max-height: 220px; }
+}
+
+.recent-card, .actions-card {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px var(--shadow) !important;
+
+  mat-card-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 16px 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    mat-card-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    mat-card-subtitle { color: var(--text-muted); font-size: 0.8rem; }
+    .header-actions { margin-left: auto; }
+  }
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.4;
+    margin-bottom: 12px;
+    display: block;
+    margin-inline: auto;
+  }
+
+  p { font-size: 0.95rem; margin-bottom: 16px; }
+}
+
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+/* ─── Stat/list items ─── */
+.projects-list, .apps-list {
+  .project-item, .app-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+
+    &:last-child { border-bottom: none; }
+    &:hover { background: var(--surface-2); margin: 0 -8px; padding: 12px 8px; border-radius: var(--radius-sm); }
+
+    .project-main, .app-main { flex: 1; }
+    .project-title, .app-project { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+    .project-budget { font-size: 0.8rem; color: var(--primary); font-weight: 600; }
+    .project-meta { display: flex; align-items: center; gap: 8px; }
+    .project-date, .app-date { font-size: 0.75rem; color: var(--text-muted); }
+  }
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ─── Forms ─── */
+.full-width { width: 100%; }
+.auth-container {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: stretch;
+  background: var(--bg);
+}
+
+/* ─── Skeleton ─── */
+.skeleton-line {
+  height: 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  @extend .shimmer;
+}
+.skeleton-circle {
+  border-radius: 50%;
+  @extend .shimmer;
+}
+
+/* ─── NGX-Toastr overrides ─── */
+.toast-container {
+  .ngx-toastr {
+    border-radius: var(--radius-md) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+    font-family: var(--font-body) !important;
+    font-size: 14px !important;
+    padding: 14px 18px !important;
+    min-width: 280px;
+    border: none !important;
+    opacity: 1 !important;
+  }
+  .toast-success { background: #00B894 !important; }
+  .toast-error   { background: #E74C3C !important; }
+  .toast-info    { background: #0984e3 !important; }
+  .toast-warning { background: #FDCB6E !important; color: #333 !important; }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .dashboard-container { padding: 16px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .charts-grid { grid-template-columns: 1fr; }
+  .page-header { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+

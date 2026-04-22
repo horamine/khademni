@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastrService } from 'ngx-toastr';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -28,7 +28,7 @@ import { Project, ProjectStatus } from '../../../core/models/project.model';
 })
 export class ClientProjectsComponent implements OnInit {
   private readonly projectService = inject(ProjectService);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly toastr = inject(ToastrService);
 
   readonly loading = signal(true);
   readonly deleting = signal<number | null>(null);
@@ -76,11 +76,11 @@ export class ClientProjectsComponent implements OnInit {
         this.projects.update(ps => ps.filter(p => p.id !== project.id));
         this.applyFilters();
         this.deleting.set(null);
-        this.snackBar.open('Projet supprimé.', 'Fermer', { duration: 3000 });
+        this.toastr.success('Projet supprimé.');
       },
       error: () => {
         this.deleting.set(null);
-        this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 4000 });
+        this.toastr.error('Erreur lors de la suppression.');
       }
     });
   }

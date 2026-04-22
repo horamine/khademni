@@ -5,15 +5,21 @@
 }
 
 .app-sidenav {
-  width: 256px;
-  background: #004E89;
+  width: var(--sidebar-width);
+  background: var(--secondary);
   color: white;
   border-right: none;
-  box-shadow: 2px 0 12px rgba(0,0,0,0.15);
+  box-shadow: 2px 0 16px rgba(0,0,0,0.15);
+  transition: width 0.25s ease;
+  overflow: hidden;
+
+  &.collapsed {
+    width: var(--sidebar-collapsed);
+  }
 
   .sidenav-header {
-    padding: 20px 16px 12px;
-    background: rgba(0,0,0,0.1);
+    padding: 20px 14px 12px;
+    background: rgba(0,0,0,0.12);
 
     .brand-link {
       display: flex;
@@ -21,18 +27,20 @@
       gap: 10px;
       text-decoration: none;
       color: white;
+      overflow: hidden;
 
       .brand-logo {
         width: 36px;
         height: 36px;
         border-radius: 8px;
-        background: #FF6B35;
+        background: var(--primary);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: 'Cairo', sans-serif;
+        font-family: var(--font-arabic);
         font-weight: 800;
         font-size: 1.2rem;
+        flex-shrink: 0;
         color: white;
       }
 
@@ -40,6 +48,8 @@
         font-weight: 700;
         font-size: 1.2rem;
         letter-spacing: 0.5px;
+        white-space: nowrap;
+        font-family: var(--font-heading);
       }
     }
   }
@@ -48,14 +58,15 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 16px;
+    padding: 14px;
     background: rgba(255,255,255,0.05);
+    overflow: hidden;
 
     .user-avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: #FF6B35;
+      background: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -65,20 +76,20 @@
     }
 
     .user-details {
-      .user-name { font-weight: 600; font-size: 0.9rem; }
-      .user-role { font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+      overflow: hidden;
+      .user-name { font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .user-role { font-size: 0.72rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
     }
   }
 
-  .nav-list {
-    padding: 8px 0;
-  }
+  .nav-list { padding: 8px 0; }
 
   .nav-item {
     color: rgba(255,255,255,0.85) !important;
     border-radius: 8px;
     margin: 2px 8px;
-    transition: all 0.2s;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
 
     &:hover {
       background: rgba(255,255,255,0.1) !important;
@@ -89,7 +100,6 @@
       background: rgba(255,107,53,0.3) !important;
       color: #FF6B35 !important;
       font-weight: 600;
-
       mat-icon { color: #FF6B35 !important; }
     }
 
@@ -113,66 +123,101 @@
   flex-direction: column;
   height: 100%;
   overflow: auto;
+  background: var(--bg);
+  transition: background-color 0.3s;
 }
 
 .app-toolbar {
-  background: linear-gradient(135deg, #FF6B35 0%, #e05a2a 100%) !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid var(--border) !important;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 8px var(--shadow);
   flex-shrink: 0;
+  transition: background 0.3s, border-color 0.3s;
+  gap: 4px;
+
+  .menu-btn {
+    color: var(--text) !important;
+  }
 
   .toolbar-brand {
     display: flex;
     align-items: center;
     gap: 8px;
     text-decoration: none;
-    color: white;
-    margin-left: 8px;
+    color: var(--text);
+    margin-inline-start: 8px;
 
     .brand-icon {
       width: 32px;
       height: 32px;
       border-radius: 8px;
-      background: rgba(255,255,255,0.2);
+      background: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Cairo', sans-serif;
+      font-family: var(--font-arabic);
       font-weight: 800;
       font-size: 1rem;
+      color: white;
     }
 
     .brand-text {
       font-weight: 700;
       font-size: 1.1rem;
+      font-family: var(--font-heading);
+      color: var(--text);
     }
   }
 
   .spacer { flex: 1 1 auto; }
 
+  .icon-btn {
+    color: var(--text-muted) !important;
+    &:hover { color: var(--primary) !important; }
+  }
+
+  .lang-flag { font-size: 1.2rem; line-height: 1; }
+
+  .nav-btn {
+    color: var(--text) !important;
+    font-size: 0.85rem;
+  }
+
   .register-btn {
-    background: white !important;
-    color: #FF6B35 !important;
+    background: var(--primary) !important;
+    color: white !important;
     font-weight: 600;
+    border-radius: var(--radius-md) !important;
   }
 
   .user-menu-btn {
     display: flex;
     align-items: center;
     gap: 6px;
+    color: var(--text) !important;
 
     .toolbar-avatar {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.3);
+      background: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
       font-size: 0.85rem;
+      color: white;
+    }
+
+    .user-name-text {
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }
@@ -182,6 +227,14 @@
   overflow: auto;
 }
 
-mat-divider {
-  border-top-color: rgba(255,255,255,0.1);
+/* RTL adjustments */
+[dir="rtl"] {
+  .app-sidenav { border-right: none; border-left: none; box-shadow: -2px 0 16px rgba(0,0,0,0.15); }
 }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .app-sidenav { width: 240px !important; }
+  .user-name-text { display: none; }
+}
+

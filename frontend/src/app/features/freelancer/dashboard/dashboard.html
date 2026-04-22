@@ -2,11 +2,11 @@
   <div class="page-header">
     <h1 class="page-title">
       <mat-icon>dashboard</mat-icon>
-      Tableau de bord Freelancer
+      {{ 'DASHBOARD.FREELANCER_TITLE' | translate }}
     </h1>
-    <a mat-raised-button color="primary" routerLink="/freelancer/projects">
+    <a mat-raised-button routerLink="/freelancer/projects" class="header-cta">
       <mat-icon>search</mat-icon>
-      Parcourir les projets
+      {{ 'DASHBOARD.BROWSE_PROJECTS' | translate }}
     </a>
   </div>
 
@@ -15,72 +15,91 @@
       <mat-spinner diameter="48"></mat-spinner>
     </div>
   } @else {
-    <!-- Stats Grid -->
+    <!-- KPI Cards -->
     <div class="stats-grid">
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background:linear-gradient(135deg,#FF6B35,#e05a2a)">
-            <mat-icon>send</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ totalApplications }}</div>
-            <div class="stat-label">Candidatures envoyées</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#FF6B35,#e05a2a)">
+          <mat-icon>send</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ totalApplications }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.TOTAL_APPLICATIONS' | translate }}</div>
+        </div>
+      </div>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background:linear-gradient(135deg,#FDCB6E,#e6b65a)">
-            <mat-icon>pending</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ pendingApplications }}</div>
-            <div class="stat-label">En attente</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#FDCB6E,#e6b65a)">
+          <mat-icon>pending</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ pendingApplications }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.PENDING_APPLICATIONS' | translate }}</div>
+        </div>
+      </div>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background:linear-gradient(135deg,#00B894,#009d7e)">
-            <mat-icon>check_circle</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ acceptedApplications }}</div>
-            <div class="stat-label">Acceptées</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#00B894,#009d7e)">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ acceptedApplications }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.ACCEPTED_APPLICATIONS' | translate }}</div>
+        </div>
+      </div>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background:linear-gradient(135deg,#E74C3C,#c0392b)">
-            <mat-icon>cancel</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ rejectedApplications }}</div>
-            <div class="stat-label">Rejetées</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#E74C3C,#c0392b)">
+          <mat-icon>cancel</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ rejectedApplications }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.REJECTED_APPLICATIONS' | translate }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">{{ 'DASHBOARD.CHART_PROJECTS_TIME' | translate }}</div>
+        <div class="chart-subtitle">{{ 'DASHBOARD.DEMO_DATA' | translate }}</div>
+        <div style="height:200px">
+          <canvas baseChart
+            [data]="lineChartData"
+            [options]="lineChartOptions"
+            type="line">
+          </canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">{{ 'DASHBOARD.CHART_APP_STATUS' | translate }}</div>
+        <div class="chart-subtitle">{{ 'DASHBOARD.DEMO_DATA' | translate }}</div>
+        <div style="height:200px">
+          <canvas baseChart
+            [data]="barChartData"
+            [options]="barChartOptions"
+            type="bar">
+          </canvas>
+        </div>
+      </div>
     </div>
 
     <!-- Recent Applications -->
     <mat-card class="recent-card">
       <mat-card-header>
-        <mat-card-title>Candidatures récentes</mat-card-title>
+        <mat-card-title>{{ 'DASHBOARD.RECENT_APPLICATIONS' | translate }}</mat-card-title>
         <div class="header-actions">
-          <a mat-button routerLink="/freelancer/applications">Voir tout</a>
+          <a mat-button routerLink="/freelancer/applications">{{ 'DASHBOARD.VIEW_ALL' | translate }}</a>
         </div>
       </mat-card-header>
       <mat-card-content>
         @if (applications().length === 0) {
           <div class="empty-state">
             <mat-icon>work_off</mat-icon>
-            <p>Vous n'avez pas encore postulé à des projets.</p>
-            <a mat-raised-button color="primary" routerLink="/freelancer/projects">
-              Trouver des projets
+            <p>{{ 'DASHBOARD.EMPTY_APPLICATIONS' | translate }}</p>
+            <a mat-raised-button routerLink="/freelancer/projects">
+              {{ 'DASHBOARD.EMPTY_APPLICATIONS_CTA' | translate }}
             </a>
           </div>
         } @else {
@@ -88,7 +107,7 @@
             @for (app of applications().slice(0, 5); track app.id) {
               <div class="app-item">
                 <div class="app-main">
-                  <div class="app-project">Projet #{{ app.projectId }}</div>
+                  <div class="app-project">{{ 'PROJECTS.PROJECT_ID' | translate }}{{ app.projectId }}</div>
                   <div class="app-date">{{ app.appliedAt | date:'dd/MM/yyyy' }}</div>
                 </div>
                 <span class="status-pill" [style.background]="getStatusColor(app.status)">
@@ -104,24 +123,25 @@
     <!-- Quick Actions -->
     <mat-card class="actions-card">
       <mat-card-header>
-        <mat-card-title>Actions rapides</mat-card-title>
+        <mat-card-title>{{ 'DASHBOARD.QUICK_ACTIONS' | translate }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="quick-actions">
-          <a mat-raised-button color="primary" routerLink="/freelancer/projects">
+          <a mat-raised-button routerLink="/freelancer/projects" class="header-cta">
             <mat-icon>search</mat-icon>
-            Parcourir les projets
+            {{ 'DASHBOARD.BROWSE_PROJECTS' | translate }}
           </a>
           <a mat-stroked-button routerLink="/freelancer/applications">
             <mat-icon>list_alt</mat-icon>
-            Mes candidatures
+            {{ 'DASHBOARD.MY_APPLICATIONS' | translate }}
           </a>
           <a mat-stroked-button routerLink="/freelancer/profile">
             <mat-icon>person</mat-icon>
-            Mon profil
+            {{ 'DASHBOARD.MY_PROFILE' | translate }}
           </a>
         </div>
       </mat-card-content>
     </mat-card>
   }
 </div>
+

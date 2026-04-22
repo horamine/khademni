@@ -2,7 +2,7 @@
   <div class="page-header">
     <h1 class="page-title">
       <mat-icon>admin_panel_settings</mat-icon>
-      Administration
+      {{ 'DASHBOARD.ADMIN_TITLE' | translate }}
     </h1>
   </div>
 
@@ -11,82 +11,112 @@
       <mat-spinner diameter="48"></mat-spinner>
     </div>
   } @else {
+    <!-- KPI Cards -->
     <div class="stats-grid">
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background:linear-gradient(135deg,#FF6B35,#e05a2a)">
-            <mat-icon>people</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ totalUsers }}</div>
-            <div class="stat-label">Utilisateurs total</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#FF6B35,#e05a2a)">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ totalUsers }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.TOTAL_USERS' | translate }}</div>
+        </div>
+      </div>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background:linear-gradient(135deg,#004E89,#003a6b)">
-            <mat-icon>engineering</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ totalFreelancers }}</div>
-            <div class="stat-label">Freelancers</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#004E89,#003a6b)">
+          <mat-icon>engineering</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ totalFreelancers }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.TOTAL_FREELANCERS' | translate }}</div>
+        </div>
+      </div>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background:linear-gradient(135deg,#00B894,#009d7e)">
-            <mat-icon>business</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ totalClients }}</div>
-            <div class="stat-label">Clients</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#00B894,#009d7e)">
+          <mat-icon>business</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ totalClients }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.TOTAL_CLIENTS' | translate }}</div>
+        </div>
+      </div>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background:linear-gradient(135deg,#FDCB6E,#e6b65a)">
-            <mat-icon>folder</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ totalProjects }}</div>
-            <div class="stat-label">Projets total</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#FDCB6E,#e6b65a)">
+          <mat-icon>folder</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ totalProjects }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.TOTAL_PROJECTS' | translate }}</div>
+        </div>
+      </div>
 
-      <mat-card class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon" style="background:linear-gradient(135deg,#636E72,#4a5568)">
-            <mat-icon>pending_actions</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-value">{{ openProjects }}</div>
-            <div class="stat-label">Projets ouverts</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#636E72,#4a5568)">
+          <mat-icon>pending_actions</mat-icon>
+        </div>
+        <div class="kpi-info">
+          <div class="kpi-value">{{ openProjects }}</div>
+          <div class="kpi-label">{{ 'DASHBOARD.OPEN_PROJECTS' | translate }}</div>
+        </div>
+      </div>
     </div>
 
-    <div class="admin-actions">
-      <mat-card class="action-card">
-        <mat-card-header>
-          <mat-icon mat-card-avatar>people</mat-icon>
-          <mat-card-title>Gestion des utilisateurs</mat-card-title>
-          <mat-card-subtitle>Voir, filtrer et supprimer les utilisateurs</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-actions>
-          <a mat-raised-button color="primary" routerLink="/admin/users">
+    <!-- Charts -->
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">{{ 'DASHBOARD.CHART_USERS_ROLE' | translate }}</div>
+        <div class="chart-subtitle">{{ totalUsers }} {{ 'DASHBOARD.TOTAL_USERS' | translate | lowercase }}</div>
+        <div style="height:200px">
+          <canvas baseChart
+            [data]="usersBarData"
+            [options]="usersBarOptions"
+            type="bar">
+          </canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">{{ 'DASHBOARD.CHART_GROWTH' | translate }}</div>
+        <div class="chart-subtitle">{{ 'DASHBOARD.DEMO_DATA' | translate }}</div>
+        <div style="height:200px">
+          <canvas baseChart
+            [data]="growthLineData"
+            [options]="growthLineOptions"
+            type="line">
+          </canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-title">{{ 'DASHBOARD.CHART_APP_STATUS' | translate }}</div>
+        <div class="chart-subtitle">{{ totalProjects }} {{ 'DASHBOARD.TOTAL_PROJECTS' | translate | lowercase }}</div>
+        <div style="height:200px">
+          <canvas baseChart
+            [data]="projectsDonutData"
+            [options]="projectsDonutOptions"
+            type="doughnut">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Actions -->
+    <mat-card class="actions-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'DASHBOARD.QUICK_ACTIONS' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="quick-actions">
+          <a mat-raised-button routerLink="/admin/users" class="action-primary">
             <mat-icon>manage_accounts</mat-icon>
-            Gérer les utilisateurs
+            {{ 'DASHBOARD.MANAGE_USERS' | translate }}
           </a>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   }
 </div>
+

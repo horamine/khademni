@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastrService } from 'ngx-toastr';
 import { ProjectService } from '../../../core/services/project.service';
 
 @Component({
@@ -27,7 +27,7 @@ export class CreateProjectComponent implements OnInit {
   private readonly projectService = inject(ProjectService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly toastr = inject(ToastrService);
 
   readonly loading = signal(false);
   readonly isEdit = signal(false);
@@ -57,7 +57,7 @@ export class CreateProjectComponent implements OnInit {
           });
         },
         error: () => {
-          this.snackBar.open('Projet introuvable.', 'Fermer', { duration: 3000 });
+          this.toastr.success('Projet introuvable.');
           this.router.navigate(['/client/projects']);
         }
       });
@@ -84,12 +84,12 @@ export class CreateProjectComponent implements OnInit {
       next: (saved) => {
         this.loading.set(false);
         const msg = this.isEdit() ? 'Projet mis à jour !' : 'Projet créé avec succès !';
-        this.snackBar.open(msg, 'Fermer', { duration: 3000 });
+        this.toastr.success(msg);
         this.router.navigate(['/client/projects', saved.id]);
       },
       error: () => {
         this.loading.set(false);
-        this.snackBar.open('Erreur. Veuillez réessayer.', 'Fermer', { duration: 4000 });
+        this.toastr.error('Erreur. Veuillez réessayer.');
       }
     });
   }
