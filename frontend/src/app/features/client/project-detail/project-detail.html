@@ -1,0 +1,159 @@
+<div class="page-container">
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (project()) {
+    <!-- Header -->
+    <div class="page-header">
+      <div class="header-left">
+        <a mat-icon-button routerLink="/client/projects" color="primary">
+          <mat-icon>arrow_back</mat-icon>
+        </a>
+        <div>
+          <h1 class="page-title">{{ project()!.title }}</h1>
+          <div class="header-meta">
+            <span class="status-pill" [style.background]="getStatusColor(project()!.status)">
+              {{ project()!.status }}
+            </span>
+            <span class="meta-info">Créé le {{ project()!.createdAt | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a mat-stroked-button [routerLink]="['/client/projects', project()!.id, 'edit']">
+          <mat-icon>edit</mat-icon>
+          Modifier
+        </a>
+        <button mat-stroked-button color="warn" (click)="deleteProject()">
+          <mat-icon>delete</mat-icon>
+          Supprimer
+        </button>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <!-- Project Details -->
+      <mat-card class="detail-card">
+        <mat-card-header>
+          <mat-card-title>Détails du projet</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="detail-section">
+            <h3>Description</h3>
+            <p class="description-text">{{ project()!.description }}</p>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="detail-row">
+            <div class="detail-item">
+              <mat-icon color="primary">monetization_on</mat-icon>
+              <div>
+                <div class="detail-label">Budget</div>
+                <div class="detail-value">{{ project()!.budget | currency:'MAD ':'code' }}</div>
+              </div>
+            </div>
+            @if (project()!.deadline) {
+              <div class="detail-item">
+                <mat-icon color="primary">event</mat-icon>
+                <div>
+                  <div class="detail-label">Deadline</div>
+                  <div class="detail-value">{{ project()!.deadline | date:'dd/MM/yyyy' }}</div>
+                </div>
+              </div>
+            }
+          </div>
+
+          @if (project()!.requiredSkills?.length) {
+            <mat-divider></mat-divider>
+            <div class="detail-section">
+              <h3>Compétences requises</h3>
+              <div class="skills-row">
+                @for (skill of project()!.requiredSkills; track skill) {
+                  <span class="skill-chip">{{ skill }}</span>
+                }
+              </div>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Applications -->
+      <mat-card class="applications-card">
+        <mat-card-header>
+          <mat-card-title>
+            Candidatures reçues
+            <span class="count-badge">{{ applications().length }}</span>
+          </mat-card-title>
+          <mat-card-subtitle>
+            {{ pendingApplications().length }} en attente de traitement
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          @if (applications().length === 0) {
+            <div class="empty-state">
+              <mat-icon>inbox</mat-icon>
+              <p>Aucune candidature pour l'instant.</p>
+              <p class="empty-sub">Partagez votre projet pour recevoir des candidatures.</p>
+            </div>
+          } @else {
+            <div class="applications-list">
+              @for (app of applications(); track app.id) {
+                <div class="application-item" [class.accepted]="app.status === ApplicationStatus.ACCEPTED" [class.rejected]="app.status === ApplicationStatus.REJECTED">
+                  <div class="applicant-info">
+                    <div class="applicant-avatar">
+                      <mat-icon>person</mat-icon>
+                    </div>
+                    <div class="applicant-details">
+                      <div class="applicant-name">Freelancer #{{ app.freelancerId }}</div>
+                      <div class="applicant-date">Postulé le {{ app.appliedAt | date:'dd/MM/yyyy HH:mm' }}</div>
+                    </div>
+                    <span class="status-pill" [style.background]="getStatusColor(app.status)">
+                      {{ app.status }}
+                    </span>
+                  </div>
+
+                  @if (app.coverLetter) {
+                    <div class="cover-letter">
+                      <strong>Lettre de motivation:</strong>
+                      <p>{{ app.coverLetter }}</p>
+                    </div>
+                  }
+
+                  @if (app.proposedBudget) {
+                    <div class="proposed-budget">
+                      <mat-icon>monetization_on</mat-icon>
+                      Budget proposé: <strong>{{ app.proposedBudget | currency:'MAD ':'code' }}</strong>
+                    </div>
+                  }
+
+                  @if (app.status === ApplicationStatus.PENDING) {
+                    <div class="application-actions">
+                      <button mat-raised-button color="primary"
+                        (click)="acceptApplication(app)"
+                        [disabled]="processingId() === app.id">
+                        @if (processingId() === app.id) {
+                          <mat-spinner diameter="16"></mat-spinner>
+                        } @else {
+                          <mat-icon>check</mat-icon>
+                        }
+                        Accepter
+                      </button>
+                      <button mat-stroked-button color="warn"
+                        (click)="rejectApplication(app)"
+                        [disabled]="processingId() === app.id">
+                        <mat-icon>close</mat-icon>
+                        Rejeter
+                      </button>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

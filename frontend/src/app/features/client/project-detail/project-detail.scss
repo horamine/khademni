@@ -1,0 +1,239 @@
+.page-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  .header-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: #FF6B35;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .meta-info {
+    font-size: 0.85rem;
+    color: #636e72;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail-card, .applications-card {
+  height: fit-content;
+}
+
+.detail-section {
+  margin: 16px 0;
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #004E89;
+  }
+}
+
+.description-text {
+  color: #636e72;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.detail-row {
+  display: flex;
+  gap: 24px;
+  padding: 16px 0;
+  flex-wrap: wrap;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  mat-icon { color: #FF6B35; }
+  .detail-label { font-size: 0.8rem; color: #636e72; }
+  .detail-value { font-weight: 600; font-size: 1rem; }
+}
+
+.skills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.skill-chip {
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: #e8f0fe;
+  font-size: 0.8rem;
+  color: #004E89;
+  font-weight: 500;
+}
+
+.applications-card {
+  mat-card-header {
+    .count-badge {
+      background: #FF6B35;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-left: 8px;
+    }
+  }
+}
+
+.applications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.application-item {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  transition: border-color 0.2s;
+
+  &.accepted {
+    border-color: #00B894;
+    background: #f0faf7;
+  }
+
+  &.rejected {
+    border-color: #dfe6e9;
+    background: #f8f9fa;
+    opacity: 0.8;
+  }
+}
+
+.applicant-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.applicant-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B35, #004E89);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  mat-icon { color: white; }
+}
+
+.applicant-details {
+  flex: 1;
+  .applicant-name { font-weight: 600; font-size: 0.95rem; }
+  .applicant-date { font-size: 0.8rem; color: #636e72; }
+}
+
+.cover-letter {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin: 8px 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  strong { display: block; margin-bottom: 4px; color: #004E89; }
+  p { margin: 0; color: #636e72; }
+}
+
+.proposed-budget {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: #FF6B35;
+  margin: 8px 0;
+  mat-icon { font-size: 16px; height: 16px; width: 16px; }
+}
+
+.application-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.status-pill {
+  padding: 3px 10px;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  gap: 8px;
+  color: #636e72;
+  text-align: center;
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    opacity: 0.3;
+  }
+
+  p { margin: 0; }
+  .empty-sub { font-size: 0.85rem; opacity: 0.8; }
+}

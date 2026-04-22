@@ -1,0 +1,122 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>work</mat-icon>
+      Projets disponibles
+    </h1>
+  </div>
+
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Rechercher un projet</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()"
+          placeholder="Titre, compétence, description..." />
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (filtered().length === 0) {
+    <div class="empty-state">
+      <mat-icon>work_off</mat-icon>
+      <h3>Aucun projet disponible</h3>
+      <p>Revenez plus tard ou modifiez vos filtres.</p>
+    </div>
+  } @else {
+    <div class="projects-list">
+      @for (project of filtered(); track project.id) {
+        <mat-card class="project-card">
+          <mat-card-header>
+            <mat-card-title>{{ project.title }}</mat-card-title>
+            <mat-card-subtitle>
+              Publié le {{ project.createdAt | date:'dd/MM/yyyy' }}
+            </mat-card-subtitle>
+            <div class="budget-badge">
+              <mat-icon>monetization_on</mat-icon>
+              {{ project.budget | currency:'MAD ':'code' }}
+            </div>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="project-description">
+              {{ project.description | slice:0:200 }}{{ (project.description?.length ?? 0) > 200 ? '...' : '' }}
+            </p>
+
+            @if (project.requiredSkills?.length) {
+              <div class="skills-row">
+                @for (skill of project.requiredSkills; track skill) {
+                  <span class="skill-chip">{{ skill }}</span>
+                }
+              </div>
+            }
+
+            <!-- Apply Form (inline) -->
+            @if (activeApplyProjectId() === project.id) {
+              <div class="apply-form-container">
+                <h3>Postuler à ce projet</h3>
+                <form [formGroup]="applyForm" (ngSubmit)="submitApplication(project)">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Lettre de motivation</mat-label>
+                    <textarea matInput formControlName="coverLetter" rows="4"
+                      placeholder="Expliquez pourquoi vous êtes le meilleur candidat..."></textarea>
+                    @if (applyForm.get('coverLetter')?.touched && applyForm.get('coverLetter')?.hasError('required')) {
+                      <mat-error>La lettre de motivation est requise</mat-error>
+                    }
+                    @if (applyForm.get('coverLetter')?.touched && applyForm.get('coverLetter')?.hasError('minlength')) {
+                      <mat-error>Minimum 20 caractères</mat-error>
+                    }
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" class="budget-field">
+                    <mat-label>Budget proposé (MAD)</mat-label>
+                    <mat-icon matPrefix>monetization_on</mat-icon>
+                    <input matInput type="number" formControlName="proposedBudget" placeholder="ex: 3000" min="1" />
+                    @if (applyForm.get('proposedBudget')?.touched && applyForm.get('proposedBudget')?.hasError('required')) {
+                      <mat-error>Le budget est requis</mat-error>
+                    }
+                  </mat-form-field>
+                  <div class="apply-actions">
+                    <button mat-raised-button color="primary" type="submit"
+                      [disabled]="applyForm.invalid || applyingTo() === project.id">
+                      @if (applyingTo() === project.id) {
+                        <mat-spinner diameter="20"></mat-spinner>
+                      } @else {
+                        <mat-icon>send</mat-icon>
+                        Envoyer la candidature
+                      }
+                    </button>
+                    <button mat-stroked-button type="button" (click)="cancelApply()">Annuler</button>
+                  </div>
+                </form>
+              </div>
+            }
+          </mat-card-content>
+
+          <mat-card-actions>
+            @if (appliedIds().has(project.id!)) {
+              <button mat-button disabled>
+                <mat-icon>check_circle</mat-icon>
+                Candidature envoyée
+              </button>
+            } @else if (activeApplyProjectId() !== project.id) {
+              <button mat-raised-button color="primary" (click)="showApplyForm(project.id!)">
+                <mat-icon>send</mat-icon>
+                Postuler
+              </button>
+            }
+            @if (project.deadline) {
+              <span class="deadline">
+                <mat-icon>event</mat-icon>
+                Deadline: {{ project.deadline | date:'dd/MM/yyyy' }}
+              </span>
+            }
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

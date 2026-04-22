@@ -1,0 +1,110 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>person</mat-icon>
+      Mon profil
+    </h1>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else {
+    <div class="profile-grid">
+      <!-- Profile Card -->
+      <mat-card class="profile-card">
+        <mat-card-content>
+          @if (freelancer()) {
+            <div class="avatar-section">
+              <div class="avatar">{{ getInitials(freelancer()!.name) }}</div>
+              <div class="avatar-name">{{ freelancer()!.name }}</div>
+              <div class="avatar-email">{{ freelancer()!.email }}</div>
+            </div>
+
+            @if (freelancer()!.skills?.length) {
+              <div class="profile-skills">
+                <h3>Compétences</h3>
+                <div class="skills-row">
+                  @for (skill of freelancer()!.skills; track skill) {
+                    <span class="skill-chip">{{ skill }}</span>
+                  }
+                </div>
+              </div>
+            }
+
+            <div class="profile-stats">
+              <div class="stat-item">
+                <mat-icon>work_history</mat-icon>
+                <div>
+                  <div class="stat-label">Expérience</div>
+                  <div class="stat-value">{{ freelancer()!.experienceYears }} ans</div>
+                </div>
+              </div>
+              <div class="stat-item">
+                <mat-icon>schedule</mat-icon>
+                <div>
+                  <div class="stat-label">Disponibilité</div>
+                  <div class="stat-value">{{ freelancer()!.availability }}h/semaine</div>
+                </div>
+              </div>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Edit Form -->
+      <mat-card class="edit-card">
+        <mat-card-header>
+          <mat-card-title>Modifier mes informations</mat-card-title>
+          <mat-card-subtitle>Mettez à jour votre profil pour attirer les clients</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="form" (ngSubmit)="onSave()" class="edit-form">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Nom complet</mat-label>
+              <mat-icon matPrefix>person</mat-icon>
+              <input matInput formControlName="name" />
+              @if (form.get('name')?.touched && form.get('name')?.hasError('required')) {
+                <mat-error>Le nom est requis</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Compétences (séparées par virgule)</mat-label>
+              <mat-icon matPrefix>psychology</mat-icon>
+              <input matInput formControlName="skills" placeholder="ex: Angular, Java, Docker" />
+              <mat-hint>Séparez les compétences par des virgules</mat-hint>
+            </mat-form-field>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Années d'expérience</mat-label>
+                <mat-icon matPrefix>work_history</mat-icon>
+                <input matInput type="number" formControlName="experienceYears" min="0" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Disponibilité (h/semaine)</mat-label>
+                <mat-icon matPrefix>schedule</mat-icon>
+                <input matInput type="number" formControlName="availability" min="0" />
+              </mat-form-field>
+            </div>
+
+            <div class="form-actions">
+              <button mat-raised-button color="primary" type="submit"
+                [disabled]="saving() || form.invalid">
+                @if (saving()) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                } @else {
+                  <mat-icon>save</mat-icon>
+                  Sauvegarder
+                }
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

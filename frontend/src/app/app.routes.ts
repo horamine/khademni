@@ -68,6 +68,21 @@ export const routes: Routes = [
               import('./features/client/projects/projects').then((m) => m.ClientProjectsComponent)
           },
           {
+            path: 'projects/new',
+            loadComponent: () =>
+              import('./features/client/create-project/create-project').then((m) => m.CreateProjectComponent)
+          },
+          {
+            path: 'projects/:id/edit',
+            loadComponent: () =>
+              import('./features/client/create-project/create-project').then((m) => m.CreateProjectComponent)
+          },
+          {
+            path: 'projects/:id',
+            loadComponent: () =>
+              import('./features/client/project-detail/project-detail').then((m) => m.ClientProjectDetailComponent)
+          },
+          {
             path: 'create-project',
             loadComponent: () =>
               import('./features/client/create-project/create-project').then((m) => m.CreateProjectComponent)

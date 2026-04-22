@@ -14,6 +14,8 @@ export interface Application {
   id?: number;
   projectId: number;
   freelancerId: number;
+  coverLetter?: string;
+  proposedBudget?: number;
   appliedAt?: string;
   status?: ApplicationStatus;
 }
@@ -29,8 +31,6 @@ export interface Contract {
   status?: ContractStatus;
   payment: number;
 }
-
-// TODO: confirm endpoint with backend — no /api/contracts route in gateway
 
 export interface Rating {
   id?: number;

@@ -55,14 +55,15 @@ export class RegisterComponent {
     this.loading.set(true);
     const { name, email, password, role } = this.form.getRawValue();
     this.authService.register({ name: name!, email: email!, password: password!, role: role! }).subscribe({
-      next: () => {
+      next: (authResponse) => {
         this.loading.set(false);
-        this.snackBar.open('Account created! Please sign in.', 'Close', { duration: 4000 });
-        this.router.navigate(['/login']);
+        this.snackBar.open('Account created! Welcome to Khademni 🎉', 'Close', { duration: 3000 });
+        this.authService.setAuth(authResponse);
+        this.router.navigate([this.authService.getDashboardRoute()]);
       },
       error: (err) => {
         this.loading.set(false);
-        const msg = err?.error ?? 'Registration failed. Please try again.';
+        const msg = err?.error?.message ?? err?.error ?? 'Registration failed. Please try again.';
         this.snackBar.open(typeof msg === 'string' ? msg : 'Registration failed.', 'Close', { duration: 4000 });
       }
     });

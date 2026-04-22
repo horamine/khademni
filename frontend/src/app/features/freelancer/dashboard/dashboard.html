@@ -1,29 +1,127 @@
-<h1>Freelancer Dashboard</h1>
-<div class="stats-grid">
-  <mat-card class="stat-card">
-    <mat-card-content>
-      <mat-icon color="primary">work</mat-icon>
-      <div class="stat-value">0</div>
-      <div class="stat-label">Active Projects</div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="stat-card">
-    <mat-card-content>
-      <mat-icon color="accent">send</mat-icon>
-      <div class="stat-value">0</div>
-      <div class="stat-label">Applications Sent</div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="stat-card">
-    <mat-card-content>
-      <mat-icon color="warn">star</mat-icon>
-      <div class="stat-value">0</div>
-      <div class="stat-label">Ratings Received</div>
-    </mat-card-content>
-  </mat-card>
+<div class="dashboard-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>dashboard</mat-icon>
+      Tableau de bord Freelancer
+    </h1>
+    <a mat-raised-button color="primary" routerLink="/freelancer/projects">
+      <mat-icon>search</mat-icon>
+      Parcourir les projets
+    </a>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else {
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background:linear-gradient(135deg,#FF6B35,#e05a2a)">
+            <mat-icon>send</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ totalApplications }}</div>
+            <div class="stat-label">Candidatures envoyées</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background:linear-gradient(135deg,#FDCB6E,#e6b65a)">
+            <mat-icon>pending</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ pendingApplications }}</div>
+            <div class="stat-label">En attente</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background:linear-gradient(135deg,#00B894,#009d7e)">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ acceptedApplications }}</div>
+            <div class="stat-label">Acceptées</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background:linear-gradient(135deg,#E74C3C,#c0392b)">
+            <mat-icon>cancel</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ rejectedApplications }}</div>
+            <div class="stat-label">Rejetées</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Recent Applications -->
+    <mat-card class="recent-card">
+      <mat-card-header>
+        <mat-card-title>Candidatures récentes</mat-card-title>
+        <div class="header-actions">
+          <a mat-button routerLink="/freelancer/applications">Voir tout</a>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        @if (applications().length === 0) {
+          <div class="empty-state">
+            <mat-icon>work_off</mat-icon>
+            <p>Vous n'avez pas encore postulé à des projets.</p>
+            <a mat-raised-button color="primary" routerLink="/freelancer/projects">
+              Trouver des projets
+            </a>
+          </div>
+        } @else {
+          <div class="apps-list">
+            @for (app of applications().slice(0, 5); track app.id) {
+              <div class="app-item">
+                <div class="app-main">
+                  <div class="app-project">Projet #{{ app.projectId }}</div>
+                  <div class="app-date">{{ app.appliedAt | date:'dd/MM/yyyy' }}</div>
+                </div>
+                <span class="status-pill" [style.background]="getStatusColor(app.status)">
+                  {{ app.status }}
+                </span>
+              </div>
+            }
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Quick Actions -->
+    <mat-card class="actions-card">
+      <mat-card-header>
+        <mat-card-title>Actions rapides</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="quick-actions">
+          <a mat-raised-button color="primary" routerLink="/freelancer/projects">
+            <mat-icon>search</mat-icon>
+            Parcourir les projets
+          </a>
+          <a mat-stroked-button routerLink="/freelancer/applications">
+            <mat-icon>list_alt</mat-icon>
+            Mes candidatures
+          </a>
+          <a mat-stroked-button routerLink="/freelancer/profile">
+            <mat-icon>person</mat-icon>
+            Mon profil
+          </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
 </div>
-<mat-card style="margin-top:16px;">
-  <mat-card-content>
-    <p>🚧 Full dashboard coming soon. Explore projects and manage your applications.</p>
-  </mat-card-content>
-</mat-card>
