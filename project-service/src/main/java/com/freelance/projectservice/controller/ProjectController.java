@@ -4,9 +4,12 @@ import com.freelance.projectservice.entity.Project;
 import com.freelance.projectservice.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -34,5 +37,44 @@ public class ProjectController {
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectById(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.getProjectById(id));
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<Project>> getMyProjects(Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(projectService.getProjectsByClientEmail(email));
+    }
+
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<Project>> getProjectsByClient(@PathVariable String clientId) {
+        return ResponseEntity.ok(projectService.getProjectsByClientEmail(clientId));
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
+    public ResponseEntity<Project> updateProject(@PathVariable Long id,
+                                                  @RequestBody Project project,
+                                                  Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(projectService.updateProject(id, project, email));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteProject(@PathVariable Long id, Authentication authentication) {
+        String email = authentication.getName();
+        projectService.deleteProject(id, email);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
+    public ResponseEntity<Project> updateProjectStatus(@PathVariable Long id,
+                                                        @RequestBody Map<String, String> body) {
+        String status = body.get("status");
+        if (status == null || status.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(projectService.updateProjectStatus(id, status));
     }
 }
