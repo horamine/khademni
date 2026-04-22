@@ -7,8 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserService } from '../../../core/services/user.service';
 import { ProjectService } from '../../../core/services/project.service';
-import { User } from '../../../core/models/user.model';
-import { Project } from '../../../core/models/project.model';
+import { User, Role } from '../../../core/models/user.model';
+import { Project, ProjectStatus } from '../../../core/models/project.model';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -26,10 +26,10 @@ export class AdminDashboardComponent implements OnInit {
   readonly projects = signal<Project[]>([]);
 
   get totalUsers(): number { return this.users().length; }
-  get totalFreelancers(): number { return this.users().filter(u => u.role === 'FREELANCER' as any).length; }
-  get totalClients(): number { return this.users().filter(u => u.role === 'CLIENT' as any).length; }
+  get totalFreelancers(): number { return this.users().filter(u => u.role === Role.FREELANCER).length; }
+  get totalClients(): number { return this.users().filter(u => u.role === Role.CLIENT).length; }
   get totalProjects(): number { return this.projects().length; }
-  get openProjects(): number { return this.projects().filter(p => p.status === 'OPEN' as any).length; }
+  get openProjects(): number { return this.projects().filter(p => p.status === ProjectStatus.OPEN).length; }
 
   ngOnInit(): void {
     let loaded = 0;

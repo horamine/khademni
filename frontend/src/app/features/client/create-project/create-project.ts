@@ -37,7 +37,7 @@ export class CreateProjectComponent implements OnInit {
     title: ['', [Validators.required, Validators.minLength(5)]],
     description: ['', [Validators.required, Validators.minLength(20)]],
     budget: [null as number | null, [Validators.required, Validators.min(1)]],
-    deadline: [''],
+    deadline: [null as string | null],
     requiredSkills: ['']
   });
 
@@ -52,7 +52,7 @@ export class CreateProjectComponent implements OnInit {
             title: project.title,
             description: project.description,
             budget: project.budget,
-            deadline: project.deadline ?? '',
+            deadline: project.deadline ?? null,
             requiredSkills: project.requiredSkills?.join(', ') ?? ''
           });
         },
@@ -72,7 +72,7 @@ export class CreateProjectComponent implements OnInit {
       title: raw.title!,
       description: raw.description!,
       budget: raw.budget!,
-      deadline: raw.deadline || undefined,
+      deadline: raw.deadline ? raw.deadline : undefined,
       requiredSkills: this.parseSkills(raw.requiredSkills ?? '')
     };
 
