@@ -92,6 +92,6 @@ export class AdminUsersComponent implements OnInit {
 
   // TODO: Block user functionality (requires backend support)
   blockUser(user: User): void {
-    this.toastr.success('Fonctionnalité de blocage non disponible (TODO backend).');
+    this.toastr.info('Fonctionnalité de blocage non disponible (TODO backend).');
   }
 }

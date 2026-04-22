@@ -48,7 +48,7 @@ export class ClientProjectDetailComponent implements OnInit {
       },
       error: () => {
         this.loading.set(false);
-        this.toastr.success('Projet introuvable.');
+        this.toastr.error('Projet introuvable.');
         this.router.navigate(['/client/projects']);
       }
     });
@@ -91,7 +91,7 @@ export class ClientProjectDetailComponent implements OnInit {
       next: () => {
         this.applications.update(apps => apps.map(a => a.id === app.id ? { ...a, status: ApplicationStatus.REJECTED } : a));
         this.processingId.set(null);
-        this.toastr.success('Candidature rejetée.');
+        this.toastr.info('Candidature rejetée.');
       },
       error: () => {
         this.processingId.set(null);

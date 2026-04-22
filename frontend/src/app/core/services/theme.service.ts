@@ -26,7 +26,7 @@ export class ThemeService {
       document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
     });
 
-    // initialise translate
+    // initialize translate
     this.translate.setDefaultLang('fr');
     this.translate.use(this.lang());
   }
