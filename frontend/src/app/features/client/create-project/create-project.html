@@ -1,43 +1,84 @@
-<h1>Create Project</h1>
-<mat-card style="max-width:600px;">
-  <mat-card-header>
-    <mat-card-title>New Project</mat-card-title>
-    <mat-card-subtitle>Fill in the details to post your project</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="project-form">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Project Title</mat-label>
-        <input matInput formControlName="title" placeholder="e.g. Build a REST API" />
-        @if (form.get('title')?.hasError('required')) {
-          <mat-error>Title is required</mat-error>
-        }
-      </mat-form-field>
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>{{ isEdit() ? 'edit' : 'add_circle' }}</mat-icon>
+      {{ isEdit() ? 'Modifier le projet' : 'Créer un projet' }}
+    </h1>
+  </div>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Description</mat-label>
-        <textarea matInput formControlName="description" rows="4" placeholder="Describe what you need..."></textarea>
-        @if (form.get('description')?.hasError('required')) {
-          <mat-error>Description is required</mat-error>
-        }
-      </mat-form-field>
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>{{ isEdit() ? 'Mettre à jour' : 'Nouveau projet' }}</mat-card-title>
+      <mat-card-subtitle>{{ isEdit() ? 'Modifiez les détails de votre projet' : 'Remplissez les détails pour publier votre projet' }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="project-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Titre du projet</mat-label>
+          <mat-icon matPrefix>title</mat-icon>
+          <input matInput formControlName="title" placeholder="ex: Développer une API REST" />
+          @if (form.get('title')?.touched && form.get('title')?.hasError('required')) {
+            <mat-error>Le titre est requis</mat-error>
+          }
+          @if (form.get('title')?.touched && form.get('title')?.hasError('minlength')) {
+            <mat-error>Le titre doit faire au moins 5 caractères</mat-error>
+          }
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Budget (USD)</mat-label>
-        <input matInput type="number" formControlName="budget" placeholder="e.g. 500" />
-        @if (form.get('budget')?.hasError('required')) {
-          <mat-error>Budget is required</mat-error>
-        }
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <mat-icon matPrefix>description</mat-icon>
+          <textarea matInput formControlName="description" rows="5"
+            placeholder="Décrivez en détail ce dont vous avez besoin..."></textarea>
+          @if (form.get('description')?.touched && form.get('description')?.hasError('required')) {
+            <mat-error>La description est requise</mat-error>
+          }
+          @if (form.get('description')?.touched && form.get('description')?.hasError('minlength')) {
+            <mat-error>La description doit faire au moins 20 caractères</mat-error>
+          }
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Required Skills (comma-separated)</mat-label>
-        <input matInput formControlName="requiredSkills" placeholder="e.g. Java, Spring Boot, Angular" />
-      </mat-form-field>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="budget-field">
+            <mat-label>Budget (MAD)</mat-label>
+            <mat-icon matPrefix>monetization_on</mat-icon>
+            <input matInput type="number" formControlName="budget" placeholder="ex: 5000" min="1" />
+            @if (form.get('budget')?.touched && form.get('budget')?.hasError('required')) {
+              <mat-error>Le budget est requis</mat-error>
+            }
+            @if (form.get('budget')?.touched && form.get('budget')?.hasError('min')) {
+              <mat-error>Le budget doit être supérieur à 0</mat-error>
+            }
+          </mat-form-field>
 
-      <button mat-raised-button color="primary" type="submit" [disabled]="loading()" class="full-width">
-        Post Project
-      </button>
-    </form>
-  </mat-card-content>
-</mat-card>
+          <mat-form-field appearance="outline" class="deadline-field">
+            <mat-label>Date limite (optionnel)</mat-label>
+            <mat-icon matPrefix>event</mat-icon>
+            <input matInput type="date" formControlName="deadline" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Compétences requises (séparées par virgule)</mat-label>
+          <mat-icon matPrefix>psychology</mat-icon>
+          <input matInput formControlName="requiredSkills"
+            placeholder="ex: Java, Spring Boot, Angular, Docker" />
+          <mat-hint>Séparez les compétences par des virgules</mat-hint>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <a mat-stroked-button routerLink="/client/projects">Annuler</a>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading() || form.invalid">
+            @if (loading()) {
+              <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+              <mat-icon>{{ isEdit() ? 'save' : 'publish' }}</mat-icon>
+              {{ isEdit() ? 'Mettre à jour' : 'Publier le projet' }}
+            }
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+

@@ -43,12 +43,11 @@ export interface RegisterRequest {
   budgetRange?: string;
 }
 
-// Note: backend login returns a raw JWT string, not this object.
-// Use this interface to hold decoded/stored auth state.
+// Backend returns: { token, userId, email, role, name }
 export interface AuthResponse {
   token: string;
-  role: Role;
+  userId: number;
   email: string;
+  role: Role;
   name: string;
-  id?: number;
 }

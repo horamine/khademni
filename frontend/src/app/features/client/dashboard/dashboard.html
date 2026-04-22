@@ -1,29 +1,132 @@
-<h1>Client Dashboard</h1>
-<div class="stats-grid">
-  <mat-card class="stat-card">
-    <mat-card-content>
-      <mat-icon color="primary">folder</mat-icon>
-      <div class="stat-value">0</div>
-      <div class="stat-label">My Projects</div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="stat-card">
-    <mat-card-content>
-      <mat-icon color="accent">inbox</mat-icon>
-      <div class="stat-value">0</div>
-      <div class="stat-label">Applications Received</div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="stat-card">
-    <mat-card-content>
-      <mat-icon color="warn">handshake</mat-icon>
-      <div class="stat-value">0</div>
-      <div class="stat-label">Active Contracts</div>
-    </mat-card-content>
-  </mat-card>
+<div class="dashboard-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>dashboard</mat-icon>
+      Tableau de bord Client
+    </h1>
+    <a mat-raised-button color="primary" routerLink="/client/create-project">
+      <mat-icon>add</mat-icon>
+      Nouveau projet
+    </a>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else {
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background: linear-gradient(135deg,#FF6B35,#e05a2a)">
+            <mat-icon>folder_open</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ totalProjects }}</div>
+            <div class="stat-label">Total projets</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background: linear-gradient(135deg,#00B894,#009d7e)">
+            <mat-icon>pending_actions</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ openProjects }}</div>
+            <div class="stat-label">Projets ouverts</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background: linear-gradient(135deg,#004E89,#003a6b)">
+            <mat-icon>construction</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ inProgressProjects }}</div>
+            <div class="stat-label">En cours</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background: linear-gradient(135deg,#636E72,#4a5568)">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ closedProjects }}</div>
+            <div class="stat-label">Terminés</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Recent Projects -->
+    <mat-card class="recent-card">
+      <mat-card-header>
+        <mat-card-title>Projets récents</mat-card-title>
+        <mat-card-subtitle>Vos derniers projets publiés</mat-card-subtitle>
+        <div class="header-actions">
+          <a mat-button routerLink="/client/projects">Voir tout</a>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        @if (recentProjects().length === 0) {
+          <div class="empty-state">
+            <mat-icon>folder_off</mat-icon>
+            <p>Aucun projet pour l'instant.</p>
+            <a mat-raised-button color="primary" routerLink="/client/create-project">Créer mon premier projet</a>
+          </div>
+        } @else {
+          <div class="projects-list">
+            @for (project of recentProjects(); track project.id) {
+              <div class="project-item">
+                <div class="project-main">
+                  <div class="project-title">{{ project.title }}</div>
+                  <div class="project-budget">{{ project.budget | currency:'MAD ':'code' }}</div>
+                </div>
+                <div class="project-meta">
+                  <span class="status-pill" [style.background]="getStatusColor(project.status)">
+                    {{ project.status }}
+                  </span>
+                  <span class="project-date">{{ project.createdAt | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <a mat-icon-button [routerLink]="['/client/projects', project.id]" color="primary">
+                  <mat-icon>arrow_forward</mat-icon>
+                </a>
+              </div>
+            }
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Quick Actions -->
+    <mat-card class="actions-card">
+      <mat-card-header>
+        <mat-card-title>Actions rapides</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="quick-actions">
+          <a mat-raised-button color="primary" routerLink="/client/create-project">
+            <mat-icon>add_circle</mat-icon>
+            Créer un projet
+          </a>
+          <a mat-stroked-button routerLink="/client/projects">
+            <mat-icon>list</mat-icon>
+            Mes projets
+          </a>
+          <a mat-stroked-button routerLink="/client/freelancers">
+            <mat-icon>people</mat-icon>
+            Trouver des freelancers
+          </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
 </div>
-<mat-card style="margin-top:16px;">
-  <mat-card-content>
-    <p>🚧 Full dashboard coming soon. Post projects and find talented freelancers.</p>
-  </mat-card-content>
-</mat-card>

@@ -1,0 +1,106 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>list_alt</mat-icon>
+      Mes candidatures
+    </h1>
+    <a mat-stroked-button routerLink="/freelancer/projects">
+      <mat-icon>search</mat-icon>
+      Parcourir les projets
+    </a>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else {
+    <mat-card>
+      <mat-card-content>
+        <mat-tab-group>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>all_inclusive</mat-icon>
+              Toutes ({{ applications().length }})
+            </ng-template>
+            <ng-template matTabContent>
+              <div class="tab-content">
+                <ng-container *ngTemplateOutlet="appList; context: { $implicit: getByStatus(null) }"></ng-container>
+              </div>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>pending</mat-icon>
+              En attente ({{ getByStatus(ApplicationStatus.PENDING).length }})
+            </ng-template>
+            <ng-template matTabContent>
+              <div class="tab-content">
+                <ng-container *ngTemplateOutlet="appList; context: { $implicit: getByStatus(ApplicationStatus.PENDING) }"></ng-container>
+              </div>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>check_circle</mat-icon>
+              Acceptées ({{ getByStatus(ApplicationStatus.ACCEPTED).length }})
+            </ng-template>
+            <ng-template matTabContent>
+              <div class="tab-content">
+                <ng-container *ngTemplateOutlet="appList; context: { $implicit: getByStatus(ApplicationStatus.ACCEPTED) }"></ng-container>
+              </div>
+            </ng-template>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>cancel</mat-icon>
+              Rejetées ({{ getByStatus(ApplicationStatus.REJECTED).length }})
+            </ng-template>
+            <ng-template matTabContent>
+              <div class="tab-content">
+                <ng-container *ngTemplateOutlet="appList; context: { $implicit: getByStatus(ApplicationStatus.REJECTED) }"></ng-container>
+              </div>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+
+<ng-template #appList let-apps>
+  @if (apps.length === 0) {
+    <div class="empty-state">
+      <mat-icon>inbox</mat-icon>
+      <p>Aucune candidature dans cette catégorie.</p>
+    </div>
+  } @else {
+    <div class="app-list">
+      @for (app of apps; track app.id) {
+        <div class="app-item">
+          <div class="app-project">
+            <mat-icon>work</mat-icon>
+            <div>
+              <div class="project-title">Projet #{{ app.projectId }}</div>
+              <div class="app-date">Postulé le {{ app.appliedAt | date:'dd/MM/yyyy HH:mm' }}</div>
+            </div>
+          </div>
+
+          @if (app.proposedBudget) {
+            <div class="proposed-budget">
+              <mat-icon>monetization_on</mat-icon>
+              {{ app.proposedBudget | currency:'MAD ':'code' }}
+            </div>
+          }
+
+          <span class="status-pill" [style.background]="getStatusColor(app.status)">
+            {{ app.status }}
+          </span>
+        </div>
+      }
+    </div>
+  }
+</ng-template>

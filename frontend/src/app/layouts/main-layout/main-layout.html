@@ -1,40 +1,99 @@
-<mat-toolbar color="primary">
-  <a routerLink="/" style="display:flex;align-items:center;text-decoration:none;color:inherit;">
-    <mat-icon>work</mat-icon>
-    <span style="margin-left:8px;font-weight:700;">Khademni</span>
-  </a>
-  <span style="flex:1 1 auto;"></span>
-
-  @if (!authService.isAuthenticated()) {
-    <a mat-button routerLink="/login">
-      <mat-icon>login</mat-icon>
-      Login
-    </a>
-    <a mat-flat-button routerLink="/register">
-      <mat-icon>person_add</mat-icon>
-      Register
-    </a>
-  }
-
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidebar (only when authenticated) -->
   @if (authService.isAuthenticated()) {
-    <a mat-button [routerLink]="getDashboardRoute()">
-      <mat-icon>dashboard</mat-icon>
-      Dashboard
-    </a>
-    <button mat-button [matMenuTriggerFor]="userMenu">
-      <mat-icon>account_circle</mat-icon>
-      {{ authService.currentUser()?.name ?? authService.currentUser()?.email }}
-      <mat-icon>arrow_drop_down</mat-icon>
-    </button>
-    <mat-menu #userMenu="matMenu">
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>logout</mat-icon>
-        Logout
-      </button>
-    </mat-menu>
-  }
-</mat-toolbar>
+    <mat-sidenav #sidenav [opened]="sidenavOpen()" mode="side" class="app-sidenav">
+      <div class="sidenav-header">
+        <a routerLink="/" class="brand-link">
+          <div class="brand-logo">خ</div>
+          <span class="brand-name">Khademni</span>
+        </a>
+      </div>
 
-<main>
-  <router-outlet />
-</main>
+      <div class="user-info">
+        <div class="user-avatar">
+          {{ (authService.currentUser()?.name ?? 'U').charAt(0).toUpperCase() }}
+        </div>
+        <div class="user-details">
+          <div class="user-name">{{ authService.currentUser()?.name }}</div>
+          <div class="user-role">{{ authService.currentUser()?.role }}</div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <mat-nav-list class="nav-list">
+        @for (item of currentNavItems; track item.route) {
+          <a mat-list-item
+            [routerLink]="item.route"
+            routerLinkActive="active-link"
+            class="nav-item">
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            <span matListItemTitle>{{ item.label }}</span>
+          </a>
+        }
+      </mat-nav-list>
+
+      <mat-divider></mat-divider>
+
+      <mat-nav-list>
+        <a mat-list-item (click)="logout()" class="nav-item logout-item">
+          <mat-icon matListItemIcon>logout</mat-icon>
+          <span matListItemTitle>Se déconnecter</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+  }
+
+  <mat-sidenav-content class="sidenav-content">
+    <!-- Toolbar -->
+    <mat-toolbar class="app-toolbar" color="primary">
+      @if (authService.isAuthenticated()) {
+        <button mat-icon-button (click)="toggleSidenav()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      }
+
+      <a routerLink="/" class="toolbar-brand">
+        <span class="brand-icon">خ</span>
+        <span class="brand-text">Khademni</span>
+      </a>
+
+      <span class="spacer"></span>
+
+      @if (!authService.isAuthenticated()) {
+        <a mat-button routerLink="/login">
+          <mat-icon>login</mat-icon>
+          Connexion
+        </a>
+        <a mat-flat-button routerLink="/register" class="register-btn">
+          <mat-icon>person_add</mat-icon>
+          S'inscrire
+        </a>
+      } @else {
+        <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-btn">
+          <div class="toolbar-avatar">
+            {{ (authService.currentUser()?.name ?? 'U').charAt(0).toUpperCase() }}
+          </div>
+          {{ authService.currentUser()?.name }}
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <a mat-menu-item [routerLink]="getDashboardRoute()">
+            <mat-icon>dashboard</mat-icon>
+            Tableau de bord
+          </a>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            Se déconnecter
+          </button>
+        </mat-menu>
+      }
+    </mat-toolbar>
+
+    <!-- Page content -->
+    <main class="page-content">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

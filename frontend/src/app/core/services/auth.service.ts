@@ -16,33 +16,32 @@ export class AuthService {
   readonly currentUser = this._currentUser.asReadonly();
   readonly isAuthenticated = computed(() => this._currentUser() !== null);
   readonly role = computed(() => this._currentUser()?.role ?? null);
+  readonly userId = computed(() => this._currentUser()?.userId ?? null);
 
-  login(request: LoginRequest): Observable<string> {
+  login(request: LoginRequest): Observable<AuthResponse> {
     return this.http
-      .post(`${this.apiUrl}/api/auth/login`, request, { responseType: 'text' })
+      .post<AuthResponse>(`${this.apiUrl}/api/auth/login`, request)
       .pipe(
-        tap((token: string) => {
-          const payload = this.decodeJwt(token);
-          const authResponse: AuthResponse = {
-            token,
-            role: payload['role'] as Role,
-            email: payload['sub'] as string,
-            name: (payload['name'] as string) ?? (payload['sub'] as string),
-          };
+        tap((authResponse: AuthResponse) => {
           this.saveToStorage(authResponse);
           this._currentUser.set(authResponse);
         })
       );
   }
 
-  register(request: RegisterRequest): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/api/auth/register`, request);
+  register(request: RegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/api/auth/register`, request);
   }
 
   logout(): void {
     localStorage.removeItem('auth');
     this._currentUser.set(null);
     this.router.navigate(['/login']);
+  }
+
+  setAuth(auth: AuthResponse): void {
+    this.saveToStorage(auth);
+    this._currentUser.set(auth);
   }
 
   getToken(): string | null {
@@ -55,16 +54,6 @@ export class AuthService {
     if (r === Role.CLIENT) return '/client/dashboard';
     if (r === Role.ADMIN) return '/admin/dashboard';
     return '/';
-  }
-
-  private decodeJwt(token: string): Record<string, unknown> {
-    try {
-      const payload = token.split('.')[1];
-      const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
-      return JSON.parse(decoded) as Record<string, unknown>;
-    } catch {
-      return {};
-    }
   }
 
   private saveToStorage(auth: AuthResponse): void {

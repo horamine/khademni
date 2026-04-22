@@ -1,0 +1,149 @@
+.page-container {
+  padding: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 24px;
+  .page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #FF6B35;
+  }
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-card {
+  height: fit-content;
+
+  mat-card-content {
+    padding: 24px !important;
+  }
+
+  .avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF6B35, #004E89);
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .avatar-email {
+    font-size: 0.85rem;
+    color: #636e72;
+    text-align: center;
+  }
+
+  .profile-skills {
+    margin-bottom: 16px;
+    h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+      color: #004E89;
+    }
+  }
+
+  .skills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .skill-chip {
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: #e8f0fe;
+    font-size: 0.78rem;
+    color: #004E89;
+    font-weight: 500;
+  }
+
+  .profile-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      mat-icon { color: #FF6B35; }
+      .stat-label { font-size: 0.8rem; color: #636e72; }
+      .stat-value { font-weight: 600; font-size: 0.95rem; }
+    }
+  }
+}
+
+.edit-card {
+  mat-card-content {
+    padding: 24px !important;
+  }
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.full-width { width: 100%; }
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  mat-form-field {
+    flex: 1;
+    min-width: 160px;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}

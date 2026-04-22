@@ -1,0 +1,103 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>folder</mat-icon>
+      Mes projets
+    </h1>
+    <a mat-raised-button color="primary" routerLink="/client/create-project">
+      <mat-icon>add</mat-icon>
+      Nouveau projet
+    </a>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <div class="filters-row">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Rechercher</mat-label>
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" placeholder="Titre, description..." />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="status-field">
+          <mat-label>Statut</mat-label>
+          <mat-select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+            @for (s of statuses; track s) {
+              <mat-option [value]="s">{{ s || 'Tous les statuts' }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (filteredProjects().length === 0) {
+    <div class="empty-state">
+      <mat-icon>folder_off</mat-icon>
+      <h3>Aucun projet trouvé</h3>
+      <p>Créez votre premier projet pour commencer à recevoir des candidatures.</p>
+      <a mat-raised-button color="primary" routerLink="/client/create-project">Créer un projet</a>
+    </div>
+  } @else {
+    <div class="projects-grid">
+      @for (project of filteredProjects(); track project.id) {
+        <mat-card class="project-card">
+          <mat-card-header>
+            <mat-card-title>{{ project.title }}</mat-card-title>
+            <mat-card-subtitle>
+              Créé le {{ project.createdAt | date:'dd/MM/yyyy' }}
+            </mat-card-subtitle>
+            <div class="card-badge">
+              <span class="status-pill" [style.background]="getStatusColor(project.status)">
+                {{ project.status }}
+              </span>
+            </div>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="project-description">{{ project.description | slice:0:120 }}{{ (project.description?.length ?? 0) > 120 ? '...' : '' }}</p>
+            <div class="project-budget">
+              <mat-icon>monetization_on</mat-icon>
+              <strong>{{ project.budget | currency:'MAD ':'code' }}</strong>
+            </div>
+            @if (project.requiredSkills?.length) {
+              <div class="skills-row">
+                @for (skill of project.requiredSkills.slice(0,4); track skill) {
+                  <span class="skill-chip">{{ skill }}</span>
+                }
+                @if (project.requiredSkills.length > 4) {
+                  <span class="skill-chip more">+{{ project.requiredSkills.length - 4 }}</span>
+                }
+              </div>
+            }
+          </mat-card-content>
+
+          <mat-card-actions>
+            <a mat-button color="primary" [routerLink]="['/client/projects', project.id]">
+              <mat-icon>visibility</mat-icon>
+              Voir
+            </a>
+            <a mat-button [routerLink]="['/client/projects', project.id, 'edit']">
+              <mat-icon>edit</mat-icon>
+              Modifier
+            </a>
+            <button mat-button color="warn"
+              (click)="deleteProject(project)"
+              [disabled]="deleting() === project.id">
+              @if (deleting() === project.id) {
+                <mat-spinner diameter="16"></mat-spinner>
+              } @else {
+                <mat-icon>delete</mat-icon>
+              }
+              Supprimer
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

@@ -1,25 +1,97 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { ProjectService } from '../../../core/services/project.service';
+import { Project, ProjectStatus } from '../../../core/models/project.model';
 
 @Component({
   selector: 'app-client-projects',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, RouterLink],
-  template: `
-    <h1>My Projects</h1>
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Project List</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>🚧 Your projects will appear here.</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <a mat-raised-button color="primary" routerLink="/client/create-project">+ New Project</a>
-      </mat-card-actions>
-    </mat-card>
-  `
+  imports: [
+    CommonModule, RouterLink,
+    MatCardModule, MatButtonModule, MatIconModule, MatChipsModule,
+    MatProgressSpinnerModule, MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule
+  ],
+  templateUrl: './projects.html',
+  styleUrl: './projects.scss'
 })
-export class ClientProjectsComponent {}
+export class ClientProjectsComponent implements OnInit {
+  private readonly projectService = inject(ProjectService);
+  private readonly snackBar = inject(MatSnackBar);
+
+  readonly loading = signal(true);
+  readonly deleting = signal<number | null>(null);
+  readonly projects = signal<Project[]>([]);
+  readonly filteredProjects = signal<Project[]>([]);
+
+  searchTerm = '';
+  statusFilter = '';
+  readonly ProjectStatus = ProjectStatus;
+  readonly statuses = ['', 'OPEN', 'IN_PROGRESS', 'CLOSED', 'COMPLETED', 'CANCELLED'];
+
+  ngOnInit(): void {
+    this.loadProjects();
+  }
+
+  loadProjects(): void {
+    this.loading.set(true);
+    this.projectService.getMyProjects().subscribe({
+      next: (projects) => {
+        this.projects.set(projects);
+        this.applyFilters();
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false)
+    });
+  }
+
+  applyFilters(): void {
+    let result = this.projects();
+    if (this.searchTerm.trim()) {
+      const q = this.searchTerm.toLowerCase();
+      result = result.filter(p => p.title.toLowerCase().includes(q) || p.description.toLowerCase().includes(q));
+    }
+    if (this.statusFilter) {
+      result = result.filter(p => p.status === this.statusFilter);
+    }
+    this.filteredProjects.set(result);
+  }
+
+  deleteProject(project: Project): void {
+    if (!confirm(`Supprimer le projet "${project.title}" ?`)) return;
+    this.deleting.set(project.id!);
+    this.projectService.delete(project.id!).subscribe({
+      next: () => {
+        this.projects.update(ps => ps.filter(p => p.id !== project.id));
+        this.applyFilters();
+        this.deleting.set(null);
+        this.snackBar.open('Projet supprimé.', 'Fermer', { duration: 3000 });
+      },
+      error: () => {
+        this.deleting.set(null);
+        this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 4000 });
+      }
+    });
+  }
+
+  getStatusColor(status?: string): string {
+    switch (status) {
+      case 'OPEN': return '#00B894';
+      case 'IN_PROGRESS': return '#FF6B35';
+      case 'CLOSED': case 'COMPLETED': return '#636E72';
+      case 'CANCELLED': return '#E74C3C';
+      default: return '#636E72';
+    }
+  }
+}

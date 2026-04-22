@@ -1,0 +1,124 @@
+.page-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 24px;
+  .page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #FF6B35;
+  }
+}
+
+.filters-card {
+  margin-bottom: 24px;
+  mat-card-content { padding: 16px !important; }
+  .search-field { width: 100%; max-width: 480px; }
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  gap: 12px;
+  color: #636e72;
+  text-align: center;
+  mat-icon { font-size: 64px; height: 64px; width: 64px; opacity: 0.3; }
+  h3 { margin: 0; }
+  p { margin: 0; }
+}
+
+.freelancers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.freelancer-card {
+  text-align: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+  &:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+  }
+
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 24px 16px !important;
+  }
+}
+
+.freelancer-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B35, #004E89);
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.freelancer-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+.freelancer-email {
+  font-size: 0.8rem;
+  color: #636e72;
+}
+
+.skills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  margin: 4px 0;
+}
+
+.skill-chip {
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: #e8f0fe;
+  font-size: 0.75rem;
+  color: #004E89;
+  font-weight: 500;
+  &.more { background: #f0f0f0; color: #636e72; }
+}
+
+.freelancer-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    color: #636e72;
+    mat-icon { font-size: 16px; height: 16px; width: 16px; }
+  }
+}

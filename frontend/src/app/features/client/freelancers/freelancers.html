@@ -1,0 +1,62 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>people</mat-icon>
+      Freelancers disponibles
+    </h1>
+  </div>
+
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Rechercher par nom ou compétence</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" placeholder="ex: Angular, Java..." />
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (filtered().length === 0) {
+    <div class="empty-state">
+      <mat-icon>person_off</mat-icon>
+      <h3>Aucun freelancer trouvé</h3>
+      <p>Essayez avec d'autres termes de recherche.</p>
+    </div>
+  } @else {
+    <div class="freelancers-grid">
+      @for (freelancer of filtered(); track freelancer.id) {
+        <mat-card class="freelancer-card">
+          <mat-card-content>
+            <div class="freelancer-avatar">{{ getInitials(freelancer.name) }}</div>
+            <div class="freelancer-name">{{ freelancer.name }}</div>
+            <div class="freelancer-email">{{ freelancer.email }}</div>
+
+            @if (freelancer.skills?.length) {
+              <div class="skills-row">
+                @for (skill of freelancer.skills.slice(0, 4); track skill) {
+                  <span class="skill-chip">{{ skill }}</span>
+                }
+                @if (freelancer.skills.length > 4) {
+                  <span class="skill-chip more">+{{ freelancer.skills.length - 4 }}</span>
+                }
+              </div>
+            }
+
+            <div class="freelancer-stats">
+              @if (freelancer.experienceYears) {
+                <div class="stat-item">
+                  <mat-icon>work_history</mat-icon>
+                  {{ freelancer.experienceYears }} ans d'exp.
+                </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

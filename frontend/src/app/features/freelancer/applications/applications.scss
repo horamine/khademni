@@ -1,0 +1,120 @@
+.page-container {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  .page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #FF6B35;
+  }
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.tab-content {
+  padding: 16px 0;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  gap: 8px;
+  color: #636e72;
+  text-align: center;
+  mat-icon { font-size: 48px; height: 48px; width: 48px; opacity: 0.3; }
+  p { margin: 0; }
+}
+
+.app-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.app-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  background: #f8f9fa;
+  transition: background 0.2s;
+  flex-wrap: wrap;
+
+  &:hover { background: #f1f3f4; }
+
+  .app-project {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 200px;
+
+    mat-icon { color: #004E89; }
+
+    .project-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .app-date {
+      font-size: 0.8rem;
+      color: #636e72;
+    }
+  }
+
+  .proposed-budget {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #FF6B35;
+    font-weight: 600;
+    font-size: 0.9rem;
+    mat-icon { font-size: 16px; height: 16px; width: 16px; }
+  }
+}
+
+.status-pill {
+  padding: 4px 12px;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+mat-tab-group {
+  ::ng-deep .mat-mdc-tab-labels {
+    flex-wrap: wrap;
+  }
+}
+
+mat-tab {
+  mat-icon {
+    margin-right: 4px;
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+}

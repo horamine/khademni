@@ -1,29 +1,92 @@
-<h1>Admin Dashboard</h1>
-<div class="stats-grid">
-  <mat-card class="stat-card">
-    <mat-card-content>
-      <mat-icon color="primary">people</mat-icon>
-      <div class="stat-value">0</div>
-      <div class="stat-label">Total Users</div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="stat-card">
-    <mat-card-content>
-      <mat-icon color="accent">work</mat-icon>
-      <div class="stat-value">0</div>
-      <div class="stat-label">Total Projects</div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="stat-card">
-    <mat-card-content>
-      <mat-icon color="warn">description</mat-icon>
-      <div class="stat-value">0</div>
-      <div class="stat-label">Total Applications</div>
-    </mat-card-content>
-  </mat-card>
+<div class="dashboard-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>admin_panel_settings</mat-icon>
+      Administration
+    </h1>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else {
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background:linear-gradient(135deg,#FF6B35,#e05a2a)">
+            <mat-icon>people</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ totalUsers }}</div>
+            <div class="stat-label">Utilisateurs total</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background:linear-gradient(135deg,#004E89,#003a6b)">
+            <mat-icon>engineering</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ totalFreelancers }}</div>
+            <div class="stat-label">Freelancers</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background:linear-gradient(135deg,#00B894,#009d7e)">
+            <mat-icon>business</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ totalClients }}</div>
+            <div class="stat-label">Clients</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background:linear-gradient(135deg,#FDCB6E,#e6b65a)">
+            <mat-icon>folder</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ totalProjects }}</div>
+            <div class="stat-label">Projets total</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon" style="background:linear-gradient(135deg,#636E72,#4a5568)">
+            <mat-icon>pending_actions</mat-icon>
+          </div>
+          <div class="stat-info">
+            <div class="stat-value">{{ openProjects }}</div>
+            <div class="stat-label">Projets ouverts</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="admin-actions">
+      <mat-card class="action-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>people</mat-icon>
+          <mat-card-title>Gestion des utilisateurs</mat-card-title>
+          <mat-card-subtitle>Voir, filtrer et supprimer les utilisateurs</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions>
+          <a mat-raised-button color="primary" routerLink="/admin/users">
+            <mat-icon>manage_accounts</mat-icon>
+            Gérer les utilisateurs
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  }
 </div>
-<mat-card style="margin-top:16px;">
-  <mat-card-content>
-    <p>🚧 Admin panel coming soon. Manage users, projects, and platform settings.</p>
-  </mat-card-content>
-</mat-card>

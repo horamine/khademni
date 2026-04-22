@@ -1,7 +1,9 @@
 export enum ProjectStatus {
   OPEN = 'OPEN',
   IN_PROGRESS = 'IN_PROGRESS',
-  CLOSED = 'CLOSED'
+  CLOSED = 'CLOSED',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED'
 }
 
 export interface Project {
@@ -10,8 +12,8 @@ export interface Project {
   description: string;
   requiredSkills: string[];
   budget: number;
+  deadline?: string;
   status?: ProjectStatus;
-  // Note: backend stores clientId as String (email-based reference to user-service)
   clientId?: string;
   createdAt?: string;
 }
