@@ -94,7 +94,7 @@ Returned by `POST /api/auth/login` and `POST /api/auth/register`:
 | GET    | `/api/projects/{id}`         | Public        | Get project by ID                    |
 | POST   | `/api/projects`              | JWT (CLIENT)  | Create a project                     |
 | GET    | `/api/projects/my`           | JWT (CLIENT)  | Get authenticated client's projects  |
-| GET    | `/api/projects/client/{id}`  | JWT           | Get projects by client email/id      |
+| GET    | `/api/projects/client/{clientEmail}` | JWT           | Get projects by client email         |
 | PUT    | `/api/projects/{id}`         | JWT (CLIENT/ADMIN) | Update a project                |
 | DELETE | `/api/projects/{id}`         | JWT (CLIENT/ADMIN) | Delete a project                |
 | PUT    | `/api/projects/{id}/status`  | JWT (CLIENT/ADMIN) | Update project status (`OPEN`, `IN_PROGRESS`, `COMPLETED`, `CANCELLED`) |

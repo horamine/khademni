@@ -45,9 +45,9 @@ public class ProjectController {
         return ResponseEntity.ok(projectService.getProjectsByClientEmail(email));
     }
 
-    @GetMapping("/client/{clientId}")
-    public ResponseEntity<List<Project>> getProjectsByClient(@PathVariable String clientId) {
-        return ResponseEntity.ok(projectService.getProjectsByClientEmail(clientId));
+    @GetMapping("/client/{clientEmail}")
+    public ResponseEntity<List<Project>> getProjectsByClient(@PathVariable String clientEmail) {
+        return ResponseEntity.ok(projectService.getProjectsByClientEmail(clientEmail));
     }
 
     @PutMapping("/{id}")
@@ -69,12 +69,17 @@ public class ProjectController {
 
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('CLIENT') or hasRole('ADMIN')")
-    public ResponseEntity<Project> updateProjectStatus(@PathVariable Long id,
-                                                        @RequestBody Map<String, String> body) {
+    public ResponseEntity<?> updateProjectStatus(@PathVariable Long id,
+                                                  @RequestBody Map<String, String> body) {
         String status = body.get("status");
         if (status == null || status.isBlank()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Missing 'status' field in request body.");
         }
-        return ResponseEntity.ok(projectService.updateProjectStatus(id, status));
+        try {
+            return ResponseEntity.ok(projectService.updateProjectStatus(id, status));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Invalid status value: " + status +
+                    ". Allowed values: OPEN, IN_PROGRESS, COMPLETED, CANCELLED, CLOSED");
+        }
     }
 }
