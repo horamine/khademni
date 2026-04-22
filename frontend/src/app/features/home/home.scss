@@ -1,0 +1,17 @@
+.hero {
+  text-align: center;
+  padding: 64px 24px 32px;
+
+  h1 { font-size: 2.5rem; margin-bottom: 12px; }
+  .brand { color: var(--mat-sys-primary); }
+  .subtitle { font-size: 1.1rem; color: #555; margin-bottom: 24px; }
+  .cta-buttons { display: flex; gap: 12px; justify-content: center; }
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  max-width: 900px;
+  margin: 32px auto;
+}

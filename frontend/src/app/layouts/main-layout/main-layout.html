@@ -1,0 +1,40 @@
+<mat-toolbar color="primary">
+  <a routerLink="/" style="display:flex;align-items:center;text-decoration:none;color:inherit;">
+    <mat-icon>work</mat-icon>
+    <span style="margin-left:8px;font-weight:700;">Khademni</span>
+  </a>
+  <span style="flex:1 1 auto;"></span>
+
+  @if (!authService.isAuthenticated()) {
+    <a mat-button routerLink="/login">
+      <mat-icon>login</mat-icon>
+      Login
+    </a>
+    <a mat-flat-button routerLink="/register">
+      <mat-icon>person_add</mat-icon>
+      Register
+    </a>
+  }
+
+  @if (authService.isAuthenticated()) {
+    <a mat-button [routerLink]="getDashboardRoute()">
+      <mat-icon>dashboard</mat-icon>
+      Dashboard
+    </a>
+    <button mat-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+      {{ authService.currentUser()?.name ?? authService.currentUser()?.email }}
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </mat-menu>
+  }
+</mat-toolbar>
+
+<main>
+  <router-outlet />
+</main>

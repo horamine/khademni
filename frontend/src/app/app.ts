@@ -1,22 +1,10 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatCardModule
-  ],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  standalone: true,
+  imports: [RouterOutlet],
+  template: `<router-outlet />`
 })
-export class App {
-  protected readonly title = signal('Khademni');
-}
+export class App {}
