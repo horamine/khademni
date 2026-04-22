@@ -1,81 +1,116 @@
-<div class="auth-container">
-  <mat-card class="auth-card">
-    <mat-card-header>
-      <mat-card-title>
-        <mat-icon>person_add</mat-icon>
-        Create Account
-      </mat-card-title>
-      <mat-card-subtitle>Join Khademni today</mat-card-subtitle>
-    </mat-card-header>
+<div class="auth-split">
+  <!-- Left panel -->
+  <div class="auth-panel-left">
+    <div class="auth-brand">
+      <div class="brand-mark">خ</div>
+      <span>Khademni</span>
+    </div>
+    <h2>{{ 'AUTH.TAGLINE' | translate }}</h2>
+    <p>{{ 'AUTH.TAGLINE_SUB' | translate }}</p>
+    <div class="auth-illustration">
+      <div class="ill-circle c1"></div>
+      <div class="ill-circle c2"></div>
+      <div class="ill-circle c3"></div>
+    </div>
+  </div>
 
-    <mat-card-content>
+  <!-- Right panel -->
+  <div class="auth-panel-right">
+    <div class="auth-form-wrap">
+      <div class="auth-header">
+        <h1>{{ 'AUTH.REGISTER_TITLE' | translate }}</h1>
+        <p>{{ 'AUTH.REGISTER_SUBTITLE' | translate }}</p>
+      </div>
+
       <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Full Name</mat-label>
-          <input matInput formControlName="name" placeholder="Your name" />
-          <mat-icon matPrefix>person</mat-icon>
-          @if (form.get('name')?.hasError('required')) {
-            <mat-error>Name is required</mat-error>
-          }
-        </mat-form-field>
+        <div class="form-group">
+          <label>{{ 'AUTH.NAME' | translate }}</label>
+          <mat-form-field appearance="outline" class="full-width">
+            <input matInput formControlName="name" [placeholder]="'AUTH.NAME_PLACEHOLDER' | translate" />
+            <mat-icon matPrefix>person</mat-icon>
+            @if (form.get('name')?.touched && form.get('name')?.hasError('required')) {
+              <mat-error>{{ 'VALIDATION.REQUIRED' | translate }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" placeholder="you@example.com" />
-          <mat-icon matPrefix>email</mat-icon>
-          @if (form.get('email')?.hasError('required')) {
-            <mat-error>Email is required</mat-error>
-          }
-          @if (form.get('email')?.hasError('email')) {
-            <mat-error>Enter a valid email address</mat-error>
-          }
-        </mat-form-field>
+        <div class="form-group">
+          <label>{{ 'AUTH.EMAIL' | translate }}</label>
+          <mat-form-field appearance="outline" class="full-width">
+            <input matInput type="email" formControlName="email" [placeholder]="'AUTH.EMAIL_PLACEHOLDER' | translate" />
+            <mat-icon matPrefix>email</mat-icon>
+            @if (form.get('email')?.touched && form.get('email')?.hasError('required')) {
+              <mat-error>{{ 'VALIDATION.REQUIRED' | translate }}</mat-error>
+            }
+            @if (form.get('email')?.touched && form.get('email')?.hasError('email')) {
+              <mat-error>{{ 'VALIDATION.EMAIL_INVALID' | translate }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
-          <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" />
-          <mat-icon matPrefix>lock</mat-icon>
-          <button mat-icon-button matSuffix type="button" (click)="hidePassword.set(!hidePassword())">
-            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
-          @if (form.get('password')?.hasError('required')) {
-            <mat-error>Password is required</mat-error>
+        <div class="form-group">
+          <label>{{ 'AUTH.PASSWORD' | translate }}</label>
+          <mat-form-field appearance="outline" class="full-width">
+            <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" />
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix type="button" (click)="hidePassword.set(!hidePassword())">
+              <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (form.get('password')?.touched && form.get('password')?.hasError('required')) {
+              <mat-error>{{ 'VALIDATION.REQUIRED' | translate }}</mat-error>
+            }
+            @if (form.get('password')?.touched && form.get('password')?.hasError('minlength')) {
+              <mat-error>{{ 'VALIDATION.PASSWORD_MIN' | translate }}</mat-error>
+            }
+          </mat-form-field>
+          <!-- Password strength meter -->
+          @if (form.get('password')?.value) {
+            <div class="strength-meter">
+              <div class="strength-bar">
+                @for (i of [1,2,3,4,5]; track i) {
+                  <div class="strength-seg" [class.active]="passwordStrength() >= i"
+                    [style.background]="passwordStrength() >= i ? strengthColor() : 'var(--border)'">
+                  </div>
+                }
+              </div>
+              <span class="strength-label" [style.color]="strengthColor()">{{ strengthLabel() | translate }}</span>
+            </div>
           }
-          @if (form.get('password')?.hasError('minlength')) {
-            <mat-error>Password must be at least 6 characters</mat-error>
-          }
-        </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>I am a…</mat-label>
-          <mat-select formControlName="role">
-            <mat-option [value]="Role.FREELANCER">
+        <div class="form-group">
+          <label>{{ 'AUTH.ROLE' | translate }}</label>
+          <div class="role-selector">
+            <button type="button" class="role-btn"
+              [class.active]="selectedRole === Role.FREELANCER"
+              (click)="form.get('role')?.setValue(Role.FREELANCER)">
               <mat-icon>engineering</mat-icon>
-              Freelancer
-            </mat-option>
-            <mat-option [value]="Role.CLIENT">
+              {{ 'AUTH.ROLE_FREELANCER' | translate }}
+            </button>
+            <button type="button" class="role-btn"
+              [class.active]="selectedRole === Role.CLIENT"
+              (click)="form.get('role')?.setValue(Role.CLIENT)">
               <mat-icon>business</mat-icon>
-              Client
-            </mat-option>
-          </mat-select>
-          <mat-icon matPrefix>badge</mat-icon>
-        </mat-form-field>
+              {{ 'AUTH.ROLE_CLIENT' | translate }}
+            </button>
+          </div>
+        </div>
 
-        <button mat-raised-button color="primary" type="submit" [disabled]="loading()" class="full-width submit-btn">
+        <button mat-raised-button type="submit" [disabled]="loading()" class="submit-btn full-width">
           @if (loading()) {
             <mat-spinner diameter="20"></mat-spinner>
           } @else {
-            Create Account
+            <mat-icon>person_add</mat-icon>
+            {{ 'AUTH.SUBMIT_REGISTER' | translate }}
           }
         </button>
       </form>
-    </mat-card-content>
 
-    <mat-card-actions>
-      <p class="login-link">
-        Already have an account?
-        <a routerLink="/login">Sign in here</a>
-      </p>
-    </mat-card-actions>
-  </mat-card>
+      <div class="auth-footer">
+        <span>{{ 'AUTH.HAS_ACCOUNT' | translate }}</span>
+        <a routerLink="/login">{{ 'AUTH.SIGN_IN_LINK' | translate }}</a>
+      </div>
+    </div>
+  </div>
 </div>
+

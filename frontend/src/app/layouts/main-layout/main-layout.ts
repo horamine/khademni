@@ -8,7 +8,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { Role } from '../../core/models/user.model';
 
 @Component({
@@ -17,15 +20,18 @@ import { Role } from '../../core/models/user.model';
   imports: [
     CommonModule, RouterOutlet, RouterLink, RouterLinkActive,
     MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule,
-    MatSidenavModule, MatListModule, MatDividerModule
+    MatSidenavModule, MatListModule, MatDividerModule, MatTooltipModule,
+    TranslateModule
   ],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss'
 })
 export class MainLayout {
   protected readonly authService = inject(AuthService);
+  protected readonly themeService = inject(ThemeService);
   readonly Role = Role;
-  readonly sidenavOpen = signal(false);
+  readonly sidenavOpen = signal(true);
+  readonly sidenavCollapsed = signal(false);
 
   logout(): void {
     this.authService.logout();
@@ -36,31 +42,33 @@ export class MainLayout {
   }
 
   toggleSidenav(): void {
-    this.sidenavOpen.update(v => !v);
+    if (this.authService.isAuthenticated()) {
+      this.sidenavCollapsed.update(v => !v);
+    }
   }
 
   get clientNavItems() {
     return [
-      { label: 'Tableau de bord', icon: 'dashboard', route: '/client/dashboard' },
-      { label: 'Mes projets', icon: 'folder', route: '/client/projects' },
-      { label: 'Nouveau projet', icon: 'add_circle', route: '/client/create-project' },
-      { label: 'Freelancers', icon: 'people', route: '/client/freelancers' },
+      { labelKey: 'SIDEBAR.DASHBOARD', icon: 'dashboard', route: '/client/dashboard' },
+      { labelKey: 'SIDEBAR.MY_PROJECTS', icon: 'folder', route: '/client/projects' },
+      { labelKey: 'SIDEBAR.NEW_PROJECT', icon: 'add_circle', route: '/client/create-project' },
+      { labelKey: 'SIDEBAR.FREELANCERS', icon: 'people', route: '/client/freelancers' },
     ];
   }
 
   get freelancerNavItems() {
     return [
-      { label: 'Tableau de bord', icon: 'dashboard', route: '/freelancer/dashboard' },
-      { label: 'Parcourir projets', icon: 'work', route: '/freelancer/projects' },
-      { label: 'Mes candidatures', icon: 'list_alt', route: '/freelancer/applications' },
-      { label: 'Mon profil', icon: 'person', route: '/freelancer/profile' },
+      { labelKey: 'SIDEBAR.DASHBOARD', icon: 'dashboard', route: '/freelancer/dashboard' },
+      { labelKey: 'SIDEBAR.BROWSE_PROJECTS', icon: 'work', route: '/freelancer/projects' },
+      { labelKey: 'SIDEBAR.MY_APPLICATIONS', icon: 'list_alt', route: '/freelancer/applications' },
+      { labelKey: 'SIDEBAR.MY_PROFILE', icon: 'person', route: '/freelancer/profile' },
     ];
   }
 
   get adminNavItems() {
     return [
-      { label: 'Tableau de bord', icon: 'dashboard', route: '/admin/dashboard' },
-      { label: 'Utilisateurs', icon: 'manage_accounts', route: '/admin/users' },
+      { labelKey: 'SIDEBAR.DASHBOARD', icon: 'dashboard', route: '/admin/dashboard' },
+      { labelKey: 'SIDEBAR.USERS', icon: 'manage_accounts', route: '/admin/users' },
     ];
   }
 
@@ -72,3 +80,4 @@ export class MainLayout {
     return [];
   }
 }
+

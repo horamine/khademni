@@ -1,38 +1,229 @@
-<div class="hero">
-  <h1>Welcome to <span class="brand">Khademni</span> 👋</h1>
-  <p class="subtitle">The platform that connects talented freelancers with great clients.</p>
-  <div class="cta-buttons">
-    <a mat-raised-button color="primary" routerLink="/register">
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-text animate-on-scroll">
+      <div class="hero-badge">
+        <mat-icon>rocket_launch</mat-icon>
+        {{ 'APP.TAGLINE' | translate }}
+      </div>
+      <h1 class="hero-title">{{ 'LANDING.HERO_TITLE' | translate }}</h1>
+      <p class="hero-subtitle">{{ 'LANDING.HERO_SUBTITLE' | translate }}</p>
+      <div class="hero-actions">
+        <a mat-raised-button routerLink="/register" class="cta-primary">
+          <mat-icon>arrow_forward</mat-icon>
+          {{ 'LANDING.CTA_REGISTER' | translate }}
+        </a>
+        <a mat-stroked-button routerLink="/freelancer/projects" class="cta-ghost">
+          {{ 'LANDING.CTA_BROWSE' | translate }}
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual animate-on-scroll">
+      <div class="hero-card-stack">
+        <div class="floating-card card-1">
+          <mat-icon>work</mat-icon>
+          <div>
+            <strong>Développeur Angular</strong>
+            <span>Budget: 5000 MAD</span>
+          </div>
+        </div>
+        <div class="floating-card card-2">
+          <mat-icon>check_circle</mat-icon>
+          <div>
+            <strong>Candidature acceptée!</strong>
+            <span>Salma O. — ★★★★★</span>
+          </div>
+        </div>
+        <div class="hero-badge-float">
+          <span class="number">1.2k+</span>
+          <span class="label">Projets</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ STATS ═══════════════ -->
+<section id="stats-strip" class="stats-strip animate-on-scroll">
+  @for (stat of stats(); track $index) {
+    <div class="stat-item">
+      <div class="stat-value">{{ stat.isDecimal ? stat.value.toFixed(1) : stat.value }}{{ stat.suffix }}</div>
+      <div class="stat-label">{{ stat.label | translate }}</div>
+    </div>
+  }
+</section>
+
+<!-- ═══════════════ FEATURES ═══════════════ -->
+<section id="features" class="features-section">
+  <div class="section-container">
+    <div class="section-header animate-on-scroll">
+      <h2>{{ 'LANDING.FEATURES_TITLE' | translate }}</h2>
+      <p>{{ 'LANDING.FEATURES_SUBTITLE' | translate }}</p>
+    </div>
+    <div class="features-grid animate-on-scroll">
+      @for (f of features; track f.titleKey) {
+        <div class="feature-card">
+          <div class="feature-icon" [style.background]="f.color + '20'" [style.color]="f.color">
+            <mat-icon>{{ f.icon }}</mat-icon>
+          </div>
+          <h3>{{ f.titleKey | translate }}</h3>
+          <p>{{ f.descKey | translate }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+<section id="how-it-works" class="how-section">
+  <div class="section-container">
+    <div class="section-header animate-on-scroll">
+      <h2>{{ 'LANDING.HOW_TITLE' | translate }}</h2>
+      <p>{{ 'LANDING.HOW_SUBTITLE' | translate }}</p>
+    </div>
+    <div class="how-grid animate-on-scroll">
+      <div class="how-column">
+        <div class="how-role-badge client">
+          <mat-icon>business</mat-icon>
+          {{ 'LANDING.HOW_CLIENT_TITLE' | translate }}
+        </div>
+        <div class="steps">
+          @for (step of ['HOW_CLIENT_1','HOW_CLIENT_2','HOW_CLIENT_3']; track $index) {
+            <div class="step-item">
+              <div class="step-num">{{ $index + 1 }}</div>
+              <div class="step-text">{{ 'LANDING.' + step | translate }}</div>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="how-divider"></div>
+      <div class="how-column">
+        <div class="how-role-badge freelancer">
+          <mat-icon>engineering</mat-icon>
+          {{ 'LANDING.HOW_FREELANCER_TITLE' | translate }}
+        </div>
+        <div class="steps">
+          @for (step of ['HOW_FREELANCER_1','HOW_FREELANCER_2','HOW_FREELANCER_3']; track $index) {
+            <div class="step-item">
+              <div class="step-num freelancer">{{ $index + 1 }}</div>
+              <div class="step-text">{{ 'LANDING.' + step | translate }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TESTIMONIALS ═══════════════ -->
+<section id="testimonials" class="testimonials-section">
+  <div class="section-container">
+    <div class="section-header animate-on-scroll">
+      <h2>{{ 'LANDING.TESTIMONIALS_TITLE' | translate }}</h2>
+      <p>{{ 'LANDING.TESTIMONIALS_SUBTITLE' | translate }}</p>
+    </div>
+    <div class="testimonials-grid animate-on-scroll">
+      @for (t of testimonials; track t.name) {
+        <div class="testimonial-card">
+          <div class="t-stars">
+            @for (s of [1,2,3,4,5]; track s) {
+              <mat-icon class="star" [class.filled]="s <= t.rating">star</mat-icon>
+            }
+          </div>
+          <p class="t-text">"{{ t.text }}"</p>
+          <div class="t-author">
+            <div class="t-avatar">{{ t.avatar }}</div>
+            <div>
+              <strong>{{ t.name }}</strong>
+              <span>{{ t.role }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section id="faq" class="faq-section">
+  <div class="section-container faq-inner">
+    <div class="section-header animate-on-scroll">
+      <h2>{{ 'LANDING.FAQ_TITLE' | translate }}</h2>
+    </div>
+    <div class="faq-list animate-on-scroll">
+      @for (item of faqItems(); track $index) {
+        <div class="faq-item" [class.open]="item.open">
+          <button class="faq-question" (click)="toggleFaq($index)">
+            <span>{{ item.qKey | translate }}</span>
+            <mat-icon>{{ item.open ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+          @if (item.open) {
+            <div class="faq-answer">{{ item.aKey | translate }}</div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CTA BANNER ═══════════════ -->
+<section class="cta-banner animate-on-scroll">
+  <div class="cta-content">
+    <h2>{{ 'LANDING.CTA_TITLE' | translate }}</h2>
+    <p>{{ 'LANDING.CTA_SUBTITLE' | translate }}</p>
+    <a mat-raised-button routerLink="/register" class="cta-white-btn">
       <mat-icon>rocket_launch</mat-icon>
-      Get Started
-    </a>
-    <a mat-stroked-button routerLink="/login">
-      <mat-icon>login</mat-icon>
-      Sign In
+      {{ 'LANDING.CTA_BUTTON' | translate }}
     </a>
   </div>
-</div>
+</section>
 
-<div class="features-grid">
-  <mat-card>
-    <mat-card-header>
-      <mat-icon mat-card-avatar>search</mat-icon>
-      <mat-card-title>Find Projects</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>Browse available projects and apply to the ones that match your skills.</mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-header>
-      <mat-icon mat-card-avatar>people</mat-icon>
-      <mat-card-title>Hire Talent</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>Post your project and receive applications from qualified freelancers.</mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-header>
-      <mat-icon mat-card-avatar>verified</mat-icon>
-      <mat-card-title>Secure Contracts</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>Manage contracts, payments, and ratings all in one place.</mat-card-content>
-  </mat-card>
-</div>
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <div class="logo-mark">خ</div>
+        <span>Khademni</span>
+      </div>
+      <p>{{ 'APP.TAGLINE' | translate }}</p>
+      <div class="social-icons">
+        <a href="#" class="social-btn"><mat-icon>language</mat-icon></a>
+        <a href="#" class="social-btn"><mat-icon>mail</mat-icon></a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>{{ 'LANDING.FOOTER_PRODUCT' | translate }}</h4>
+      <a href="#">{{ 'LANDING.FOOTER_FEATURES' | translate }}</a>
+      <a href="#">{{ 'LANDING.FOOTER_PRICING' | translate }}</a>
+      <a href="#">{{ 'LANDING.FOOTER_BLOG' | translate }}</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>{{ 'LANDING.FOOTER_COMPANY' | translate }}</h4>
+      <a href="#">{{ 'LANDING.FOOTER_ABOUT' | translate }}</a>
+      <a href="#">{{ 'LANDING.FOOTER_CAREERS' | translate }}</a>
+      <a href="#">{{ 'LANDING.FOOTER_PRESS' | translate }}</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>{{ 'LANDING.FOOTER_SUPPORT' | translate }}</h4>
+      <a href="#">{{ 'LANDING.FOOTER_HELP' | translate }}</a>
+      <a href="#">{{ 'LANDING.FOOTER_CONTACT' | translate }}</a>
+      <a href="#">{{ 'LANDING.FOOTER_STATUS' | translate }}</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>{{ 'LANDING.FOOTER_LEGAL' | translate }}</h4>
+      <a href="#">{{ 'LANDING.FOOTER_PRIVACY' | translate }}</a>
+      <a href="#">{{ 'LANDING.FOOTER_TERMS' | translate }}</a>
+      <a href="#">{{ 'LANDING.FOOTER_COOKIES' | translate }}</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>{{ 'LANDING.FOOTER_COPYRIGHT' | translate }}</span>
+  </div>
+</footer>
+

@@ -9,7 +9,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastrService } from 'ngx-toastr';
 import { ProjectService } from '../../../core/services/project.service';
 import { ApplicationService } from '../../../core/services/application.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -34,7 +34,7 @@ export class FreelancerProjectsComponent implements OnInit {
   private readonly projectService = inject(ProjectService);
   private readonly applicationService = inject(ApplicationService);
   private readonly authService = inject(AuthService);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly toastr = inject(ToastrService);
   private readonly fb = inject(FormBuilder);
 
   readonly loading = signal(true);
@@ -103,11 +103,11 @@ export class FreelancerProjectsComponent implements OnInit {
         this.applyingTo.set(null);
         this.activeApplyProjectId.set(null);
         this.appliedIds.update(ids => new Set([...ids, project.id!]));
-        this.snackBar.open('Candidature envoyée avec succès !', 'Fermer', { duration: 3000 });
+        this.toastr.success('Candidature envoyée avec succès !');
       },
       error: () => {
         this.applyingTo.set(null);
-        this.snackBar.open('Erreur lors de l\'envoi de la candidature.', 'Fermer', { duration: 4000 });
+        this.toastr.error('Erreur lors de l\'envoi de la candidature.');
       }
     });
   }

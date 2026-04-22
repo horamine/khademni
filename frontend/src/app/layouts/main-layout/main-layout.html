@@ -1,23 +1,32 @@
 <mat-sidenav-container class="sidenav-container">
   <!-- Sidebar (only when authenticated) -->
   @if (authService.isAuthenticated()) {
-    <mat-sidenav #sidenav [opened]="sidenavOpen()" mode="side" class="app-sidenav">
+    <mat-sidenav
+      [opened]="true"
+      mode="side"
+      [class.collapsed]="sidenavCollapsed()"
+      class="app-sidenav">
+
       <div class="sidenav-header">
         <a routerLink="/" class="brand-link">
           <div class="brand-logo">خ</div>
-          <span class="brand-name">Khademni</span>
+          @if (!sidenavCollapsed()) {
+            <span class="brand-name">Khademni</span>
+          }
         </a>
       </div>
 
-      <div class="user-info">
-        <div class="user-avatar">
-          {{ (authService.currentUser()?.name ?? 'U').charAt(0).toUpperCase() }}
+      @if (!sidenavCollapsed()) {
+        <div class="user-info">
+          <div class="user-avatar">
+            {{ (authService.currentUser()?.name ?? 'U').charAt(0).toUpperCase() }}
+          </div>
+          <div class="user-details">
+            <div class="user-name">{{ authService.currentUser()?.name }}</div>
+            <div class="user-role">{{ authService.currentUser()?.role }}</div>
+          </div>
         </div>
-        <div class="user-details">
-          <div class="user-name">{{ authService.currentUser()?.name }}</div>
-          <div class="user-role">{{ authService.currentUser()?.role }}</div>
-        </div>
-      </div>
+      }
 
       <mat-divider></mat-divider>
 
@@ -26,9 +35,13 @@
           <a mat-list-item
             [routerLink]="item.route"
             routerLinkActive="active-link"
+            [matTooltip]="sidenavCollapsed() ? (item.labelKey | translate) : ''"
+            matTooltipPosition="right"
             class="nav-item">
             <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-            <span matListItemTitle>{{ item.label }}</span>
+            @if (!sidenavCollapsed()) {
+              <span matListItemTitle>{{ item.labelKey | translate }}</span>
+            }
           </a>
         }
       </mat-nav-list>
@@ -36,9 +49,13 @@
       <mat-divider></mat-divider>
 
       <mat-nav-list>
-        <a mat-list-item (click)="logout()" class="nav-item logout-item">
+        <a mat-list-item (click)="logout()" class="nav-item logout-item"
+          [matTooltip]="sidenavCollapsed() ? ('SIDEBAR.LOGOUT' | translate) : ''"
+          matTooltipPosition="right">
           <mat-icon matListItemIcon>logout</mat-icon>
-          <span matListItemTitle>Se déconnecter</span>
+          @if (!sidenavCollapsed()) {
+            <span matListItemTitle>{{ 'SIDEBAR.LOGOUT' | translate }}</span>
+          }
         </a>
       </mat-nav-list>
     </mat-sidenav>
@@ -46,46 +63,58 @@
 
   <mat-sidenav-content class="sidenav-content">
     <!-- Toolbar -->
-    <mat-toolbar class="app-toolbar" color="primary">
-      @if (authService.isAuthenticated()) {
-        <button mat-icon-button (click)="toggleSidenav()">
-          <mat-icon>menu</mat-icon>
-        </button>
-      }
+    <mat-toolbar class="app-toolbar">
+      <button mat-icon-button (click)="toggleSidenav()" class="menu-btn">
+        <mat-icon>{{ authService.isAuthenticated() ? (sidenavCollapsed() ? 'menu_open' : 'menu') : 'menu' }}</mat-icon>
+      </button>
 
-      <a routerLink="/" class="toolbar-brand">
-        <span class="brand-icon">خ</span>
-        <span class="brand-text">Khademni</span>
-      </a>
+      @if (!authService.isAuthenticated()) {
+        <a routerLink="/" class="toolbar-brand">
+          <div class="brand-icon">خ</div>
+          <span class="brand-text">Khademni</span>
+        </a>
+      }
 
       <span class="spacer"></span>
 
+      <!-- Language Toggle -->
+      <button mat-icon-button class="icon-btn" (click)="themeService.toggleLang()"
+        [matTooltip]="themeService.lang() === 'fr' ? 'العربية' : 'Français'">
+        <span class="lang-flag">{{ themeService.lang() === 'fr' ? '🇫🇷' : '🇸🇦' }}</span>
+      </button>
+
+      <!-- Theme Toggle -->
+      <button mat-icon-button class="icon-btn" (click)="themeService.toggleTheme()"
+        [matTooltip]="themeService.theme() === 'dark' ? ('COMMON.LIGHT_MODE' | translate) : ('COMMON.DARK_MODE' | translate)">
+        <mat-icon>{{ themeService.theme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
       @if (!authService.isAuthenticated()) {
-        <a mat-button routerLink="/login">
+        <a mat-button routerLink="/login" class="nav-btn">
           <mat-icon>login</mat-icon>
-          Connexion
+          {{ 'NAV.LOGIN' | translate }}
         </a>
         <a mat-flat-button routerLink="/register" class="register-btn">
           <mat-icon>person_add</mat-icon>
-          S'inscrire
+          {{ 'NAV.REGISTER' | translate }}
         </a>
       } @else {
         <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-btn">
           <div class="toolbar-avatar">
             {{ (authService.currentUser()?.name ?? 'U').charAt(0).toUpperCase() }}
           </div>
-          {{ authService.currentUser()?.name }}
+          <span class="user-name-text">{{ authService.currentUser()?.name }}</span>
           <mat-icon>arrow_drop_down</mat-icon>
         </button>
         <mat-menu #userMenu="matMenu">
           <a mat-menu-item [routerLink]="getDashboardRoute()">
             <mat-icon>dashboard</mat-icon>
-            Tableau de bord
+            {{ 'NAV.DASHBOARD' | translate }}
           </a>
           <mat-divider></mat-divider>
           <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>
-            Se déconnecter
+            {{ 'NAV.LOGOUT' | translate }}
           </button>
         </mat-menu>
       }
@@ -97,3 +126,4 @@
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>
+

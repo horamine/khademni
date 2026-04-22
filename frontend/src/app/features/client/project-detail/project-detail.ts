@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastrService } from 'ngx-toastr';
 import { ProjectService } from '../../../core/services/project.service';
 import { ApplicationService } from '../../../core/services/application.service';
 import { Project, ProjectStatus } from '../../../core/models/project.model';
@@ -29,7 +29,7 @@ export class ClientProjectDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly projectService = inject(ProjectService);
   private readonly applicationService = inject(ApplicationService);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly toastr = inject(ToastrService);
 
   readonly loading = signal(true);
   readonly project = signal<Project | null>(null);
@@ -48,7 +48,7 @@ export class ClientProjectDetailComponent implements OnInit {
       },
       error: () => {
         this.loading.set(false);
-        this.snackBar.open('Projet introuvable.', 'Fermer', { duration: 3000 });
+        this.toastr.error('Projet introuvable.');
         this.router.navigate(['/client/projects']);
       }
     });
@@ -71,7 +71,7 @@ export class ClientProjectDetailComponent implements OnInit {
       next: () => {
         this.applications.update(apps => apps.map(a => a.id === app.id ? { ...a, status: ApplicationStatus.ACCEPTED } : a));
         this.processingId.set(null);
-        this.snackBar.open('Candidature acceptée !', 'Fermer', { duration: 3000 });
+        this.toastr.success('Candidature acceptée !');
         // Update project status to IN_PROGRESS
         this.projectService.updateStatus(this.project()!.id!, ProjectStatus.IN_PROGRESS).subscribe({
           next: (updated) => this.project.set(updated)
@@ -79,7 +79,7 @@ export class ClientProjectDetailComponent implements OnInit {
       },
       error: () => {
         this.processingId.set(null);
-        this.snackBar.open('Erreur lors de l\'acceptation.', 'Fermer', { duration: 4000 });
+        this.toastr.error('Erreur lors de l\'acceptation.');
       }
     });
   }
@@ -91,11 +91,11 @@ export class ClientProjectDetailComponent implements OnInit {
       next: () => {
         this.applications.update(apps => apps.map(a => a.id === app.id ? { ...a, status: ApplicationStatus.REJECTED } : a));
         this.processingId.set(null);
-        this.snackBar.open('Candidature rejetée.', 'Fermer', { duration: 3000 });
+        this.toastr.info('Candidature rejetée.');
       },
       error: () => {
         this.processingId.set(null);
-        this.snackBar.open('Erreur lors du rejet.', 'Fermer', { duration: 4000 });
+        this.toastr.error('Erreur lors du rejet.');
       }
     });
   }
@@ -104,10 +104,10 @@ export class ClientProjectDetailComponent implements OnInit {
     if (!confirm(`Supprimer le projet "${this.project()?.title}" ? Cette action est irréversible.`)) return;
     this.projectService.delete(this.project()!.id!).subscribe({
       next: () => {
-        this.snackBar.open('Projet supprimé.', 'Fermer', { duration: 3000 });
+        this.toastr.success('Projet supprimé.');
         this.router.navigate(['/client/projects']);
       },
-      error: () => this.snackBar.open('Erreur lors de la suppression.', 'Fermer', { duration: 4000 })
+      error: () => this.toastr.error('Erreur lors de la suppression.')
     });
   }
 
