@@ -69,7 +69,7 @@ export class AdminProjectsComponent implements OnInit {
   }
 
   deleteProject(project: Project): void {
-    if (!confirm(`Supprimer le projet "${project.title}" ? Cette action est irréversible.`)) return;
+    if (!confirm(`${project.title} ?`)) return;
     this.deletingId.set(project.id!);
     this.projectService.delete(project.id!).subscribe({
       next: () => {

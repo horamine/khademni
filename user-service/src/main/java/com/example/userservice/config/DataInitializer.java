@@ -41,7 +41,6 @@ public class DataInitializer {
 
                 log.info("✅ Default admin account created");
                 log.info("   Email:    {}", adminEmail);
-                log.info("   Password: {}", adminPassword);
                 log.info("   ⚠️  Change this password after first login!");
             }
         };
