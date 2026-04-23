@@ -4,6 +4,7 @@ import com.freelance.projectservice.entity.Contract;
 import com.freelance.projectservice.service.ContractService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,5 +45,11 @@ public class ContractController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(contractService.updateContractStatus(id, status));
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Contract>> getAllContracts() {
+        return ResponseEntity.ok(contractService.getAllContracts());
     }
 }
