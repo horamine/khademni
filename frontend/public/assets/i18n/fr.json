@@ -28,6 +28,8 @@
     "PROJECTS": "Projets",
     "APPLICATIONS": "Candidatures",
     "CONTRACTS": "Contrats",
+    "CLIENT_CONTRACTS": "Mes contrats",
+    "FREELANCER_CONTRACTS": "Mes contrats",
     "LOGOUT": "Se déconnecter"
   },
   "LANDING": {
@@ -278,6 +280,7 @@
     "BACK": "Retour",
     "NEXT": "Suivant",
     "SUBMIT": "Valider",
+    "CANCEL": "Annuler",
     "OR": "ou",
     "AND": "et",
     "OF": "de",
@@ -381,5 +384,44 @@
       "EMPTY_STATE_SUB": "Aucun contrat sur la plateforme pour l'instant",
       "MANAGE_CONTRACTS": "Gérer les contrats"
     }
+  },
+  "CLIENT": {
+    "CONTRACTS": {
+      "TITLE": "Mes contrats",
+      "SUBTITLE": "Contrats avec les freelancers",
+      "CREATE": "Créer un contrat",
+      "CREATE_TITLE": "Créer un contrat",
+      "COMPLETE": "Marquer terminé",
+      "RATE": "Évaluer le freelancer",
+      "RATE_FREELANCER": "Évaluer le freelancer",
+      "RATE_DESC": "Comment évalueriez-vous ce freelancer ?",
+      "COMMENT": "Commentaire (optionnel)"
+    },
+    "RECOMMENDED_FREELANCERS": {
+      "TITLE": "Freelancers recommandés",
+      "DESC": "Top 5 freelancers correspondant à votre projet"
+    }
+  },
+  "FREELANCER": {
+    "CONTRACTS": {
+      "TITLE": "Mes contrats",
+      "SUBTITLE": "Vos contrats clients",
+      "ACCEPT": "Accepter",
+      "REJECT": "Rejeter"
+    }
+  },
+  "MATCH": {
+    "RECOMMENDED_FOR_YOU": "Recommandés pour vous",
+    "RECOMMENDATIONS_DESC": "Top 5 projets correspondant à votre profil",
+    "NO_RECOMMENDATIONS": "Aucune recommandation disponible",
+    "VIEW_PROJECT": "Voir le projet",
+    "SCORE_LABEL": "Score",
+    "SKILLS": "Compétences",
+    "EXPERIENCE": "Expérience",
+    "AVAILABILITY": "Disponibilité"
+  },
+  "PROFILE": {
+    "AVERAGE_RATING": "Note moyenne",
+    "NO_RATINGS": "Aucune évaluation pour l'instant"
   }
 }

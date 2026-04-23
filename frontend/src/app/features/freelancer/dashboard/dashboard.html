@@ -142,6 +142,48 @@
         </div>
       </mat-card-content>
     </mat-card>
+
+    <!-- Recommended Projects -->
+    <mat-card class="recommendations-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>auto_awesome</mat-icon>
+          {{ 'MATCH.RECOMMENDED_FOR_YOU' | translate }}
+        </mat-card-title>
+        <mat-card-subtitle>{{ 'MATCH.RECOMMENDATIONS_DESC' | translate }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        @if (loadingRecommendations()) {
+          <div class="loading-small"><mat-spinner diameter="32"></mat-spinner></div>
+        } @else if (recommendations().length === 0) {
+          <p class="empty-recs">{{ 'MATCH.NO_RECOMMENDATIONS' | translate }}</p>
+        } @else {
+          <div class="recommendations-grid">
+            @for (rec of recommendations(); track rec.projectId) {
+              <div class="rec-card">
+                <div class="rec-header">
+                  <div class="rec-title">{{ rec.title }}</div>
+                  <app-match-score-badge [score]="rec.matchScore"></app-match-score-badge>
+                </div>
+                <div class="rec-budget">
+                  <mat-icon>monetization_on</mat-icon> {{ rec.budget | number }} MAD
+                </div>
+                @if (rec.requiredSkills?.length) {
+                  <div class="rec-skills">
+                    @for (skill of rec.requiredSkills.slice(0, 3); track skill) {
+                      <span class="skill-chip">{{ skill }}</span>
+                    }
+                  </div>
+                }
+                <a mat-stroked-button routerLink="/freelancer/projects" class="rec-link">
+                  {{ 'MATCH.VIEW_PROJECT' | translate }}
+                </a>
+              </div>
+            }
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
   }
 </div>
 

@@ -147,3 +147,13 @@
   padding-top: 16px;
   border-top: 1px solid #e0e0e0;
 }
+
+.rating-summary {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(128,128,128,0.2);
+}
+.rating-row { display: flex; align-items: center; gap: 8px; }
+.rating-value { font-size: 16px; font-weight: 700; color: #FDCB6E; }
+.rating-count { font-size: 13px; color: var(--text-secondary, #636e72); }
+.no-ratings { font-size: 13px; color: var(--text-secondary, #636e72); margin: 0; }

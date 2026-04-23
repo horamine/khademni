@@ -6,3 +6,16 @@
   font-weight: 600 !important;
 }
 
+
+.recommendations-card { margin-top: 24px; border-radius: 12px; }
+.recommendations-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 8px; }
+.rec-card { border: 1px solid rgba(128,128,128,0.15); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.rec-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.rec-title { font-weight: 600; font-size: 14px; flex: 1; }
+.rec-budget { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--text-secondary, #636e72); }
+.rec-budget mat-icon { font-size: 16px; width: 16px; height: 16px; }
+.rec-skills { display: flex; flex-wrap: wrap; gap: 4px; }
+.skill-chip { padding: 2px 8px; background: rgba(255,107,53,0.15); color: #FF6B35; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.rec-link { margin-top: auto; font-size: 12px; }
+.loading-small { display: flex; justify-content: center; padding: 20px; }
+.empty-recs { color: var(--text-secondary, #636e72); text-align: center; padding: 20px 0; margin: 0; }

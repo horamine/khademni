@@ -13,11 +13,14 @@ import { ToastrService } from 'ngx-toastr';
 import { ProjectService } from '../../../core/services/project.service';
 import { ApplicationService } from '../../../core/services/application.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatchService } from '../../../core/services/match.service';
 import { Project } from '../../../core/models/project.model';
 import { Application } from '../../../core/models/application.model';
+import { RecommendedProject } from '../../../core/models/match.model';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatInputModule as MatInput } from '@angular/material/input';
+import { MatchScoreBadgeComponent } from '../../../shared/components/match-score-badge/match-score-badge';
 
 @Component({
   selector: 'app-freelancer-projects',
@@ -25,7 +28,8 @@ import { MatInputModule as MatInput } from '@angular/material/input';
   imports: [
     CommonModule, RouterLink, FormsModule, ReactiveFormsModule,
     MatCardModule, MatButtonModule, MatIconModule, MatChipsModule,
-    MatProgressSpinnerModule, MatFormFieldModule, MatInputModule, MatDialogModule
+    MatProgressSpinnerModule, MatFormFieldModule, MatInputModule, MatDialogModule,
+    MatchScoreBadgeComponent
   ],
   templateUrl: './projects.html',
   styleUrl: './projects.scss'
@@ -34,6 +38,7 @@ export class FreelancerProjectsComponent implements OnInit {
   private readonly projectService = inject(ProjectService);
   private readonly applicationService = inject(ApplicationService);
   private readonly authService = inject(AuthService);
+  private readonly matchService = inject(MatchService);
   private readonly toastr = inject(ToastrService);
   private readonly fb = inject(FormBuilder);
 
@@ -42,6 +47,7 @@ export class FreelancerProjectsComponent implements OnInit {
   readonly filtered = signal<Project[]>([]);
   readonly applyingTo = signal<number | null>(null);
   readonly appliedIds = signal<Set<number>>(new Set());
+  readonly topRecommendedIds = signal<Map<number, RecommendedProject>>(new Map());
 
   searchTerm = '';
 
@@ -58,9 +64,27 @@ export class FreelancerProjectsComponent implements OnInit {
         this.projects.set(projects);
         this.filtered.set(projects);
         this.loading.set(false);
+        this.loadRecommendations();
       },
       error: () => this.loading.set(false)
     });
+  }
+
+  private loadRecommendations(): void {
+    const userId = this.authService.userId();
+    if (!userId) return;
+    this.matchService.getRecommendedProjects(userId, 5).subscribe({
+      next: (recs) => {
+        const map = new Map<number, RecommendedProject>();
+        recs.forEach(r => map.set(r.projectId, r));
+        this.topRecommendedIds.set(map);
+      },
+      error: () => {}
+    });
+  }
+
+  getRecommendation(projectId: number): RecommendedProject | undefined {
+    return this.topRecommendedIds().get(projectId);
   }
 
   applyFilter(): void {

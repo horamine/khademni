@@ -148,6 +148,15 @@
                       </button>
                     </div>
                   }
+                  @if (app.status === ApplicationStatus.ACCEPTED) {
+                    <div class="application-actions">
+                      <button mat-raised-button color="accent"
+                        (click)="openCreateContractDialog(app)">
+                        <mat-icon>description</mat-icon>
+                        {{ 'CLIENT.CONTRACTS.CREATE' | translate }}
+                      </button>
+                    </div>
+                  }
                 </div>
               }
             </div>
@@ -155,5 +164,43 @@
         </mat-card-content>
       </mat-card>
     </div>
+
+    <!-- Recommended Freelancers (AI MatchScore) -->
+    @if (recommendedFreelancers().length > 0) {
+      <mat-card class="recommended-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>auto_awesome</mat-icon>
+            {{ 'CLIENT.RECOMMENDED_FREELANCERS.TITLE' | translate }}
+          </mat-card-title>
+          <mat-card-subtitle>{{ 'CLIENT.RECOMMENDED_FREELANCERS.DESC' | translate }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="freelancers-grid">
+            @for (fl of recommendedFreelancers(); track fl.freelancerId) {
+              <div class="freelancer-rec-card">
+                <div class="fl-header">
+                  <div class="fl-avatar">
+                    <mat-icon>person</mat-icon>
+                  </div>
+                  <div class="fl-info">
+                    <div class="fl-name">{{ fl.name || ('Freelancer #' + fl.freelancerId) }}</div>
+                    <div class="fl-exp">{{ fl.experienceYears }} ans d'expérience</div>
+                  </div>
+                  <app-match-score-badge [score]="fl.matchScore"></app-match-score-badge>
+                </div>
+                @if (fl.skills?.length) {
+                  <div class="fl-skills">
+                    @for (skill of fl.skills.slice(0, 3); track skill) {
+                      <span class="skill-chip">{{ skill }}</span>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
   }
 </div>

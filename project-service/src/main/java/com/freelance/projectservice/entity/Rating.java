@@ -15,13 +15,20 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long freelancerId;
+    @Column(nullable = false, unique = true)
+    private Long contractId;
+
+    @Column(nullable = false)
     private Long clientId;
-    private Long projectId;
+
+    @Column(nullable = false)
+    private Long freelancerId;
 
     @Min(1)
     @Max(5)
-    private int score; // 1-5
+    private Integer score; // 1-5
+
+    @Column(length = 1000)
     private String comment;
 
     private LocalDateTime createdAt;

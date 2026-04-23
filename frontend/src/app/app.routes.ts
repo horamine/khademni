@@ -49,6 +49,11 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/freelancer/applications/applications').then((m) => m.FreelancerApplicationsComponent)
           },
+          {
+            path: 'contracts',
+            loadComponent: () =>
+              import('./features/freelancer/contracts/contracts').then((m) => m.FreelancerContractsComponent)
+          },
           { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]
       },
@@ -91,6 +96,11 @@ export const routes: Routes = [
             path: 'freelancers',
             loadComponent: () =>
               import('./features/client/freelancers/freelancers').then((m) => m.ClientFreelancersComponent)
+          },
+          {
+            path: 'contracts',
+            loadComponent: () =>
+              import('./features/client/contracts/contracts').then((m) => m.ClientContractsComponent)
           },
           { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]

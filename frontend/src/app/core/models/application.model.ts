@@ -5,9 +5,11 @@ export enum ApplicationStatus {
 }
 
 export enum ContractStatus {
+  PENDING = 'PENDING',
   ACTIVE = 'ACTIVE',
   COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED'
+  CANCELLED = 'CANCELLED',
+  REJECTED = 'REJECTED'
 }
 
 export interface Application {
@@ -30,14 +32,20 @@ export interface Contract {
   endDate: string;
   status?: ContractStatus;
   payment: number;
+  createdAt?: string;
+  updatedAt?: string;
+  projectTitle?: string;
+  clientName?: string;
+  freelancerName?: string;
 }
 
 export interface Rating {
   id?: number;
+  contractId?: number;
   freelancerId: number;
   clientId: number;
-  projectId: number;
   score: number;
   comment: string;
   createdAt?: string;
 }
+

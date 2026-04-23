@@ -53,6 +53,7 @@ export class MainLayout {
       { labelKey: 'SIDEBAR.MY_PROJECTS', icon: 'folder', route: '/client/projects' },
       { labelKey: 'SIDEBAR.NEW_PROJECT', icon: 'add_circle', route: '/client/create-project' },
       { labelKey: 'SIDEBAR.FREELANCERS', icon: 'people', route: '/client/freelancers' },
+      { labelKey: 'SIDEBAR.CLIENT_CONTRACTS', icon: 'description', route: '/client/contracts' },
     ];
   }
 
@@ -62,6 +63,7 @@ export class MainLayout {
       { labelKey: 'SIDEBAR.BROWSE_PROJECTS', icon: 'work', route: '/freelancer/projects' },
       { labelKey: 'SIDEBAR.MY_APPLICATIONS', icon: 'list_alt', route: '/freelancer/applications' },
       { labelKey: 'SIDEBAR.MY_PROFILE', icon: 'person', route: '/freelancer/profile' },
+      { labelKey: 'SIDEBAR.FREELANCER_CONTRACTS', icon: 'description', route: '/freelancer/contracts' },
     ];
   }
 
