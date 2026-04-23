@@ -237,3 +237,13 @@
   p { margin: 0; }
   .empty-sub { font-size: 0.85rem; opacity: 0.8; }
 }
+
+.recommended-card { margin-top: 24px; border-radius: 12px; }
+.freelancers-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 8px; }
+.freelancer-rec-card { border: 1px solid rgba(128,128,128,0.15); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.fl-header { display: flex; align-items: center; gap: 8px; }
+.fl-avatar { width: 36px; height: 36px; background: rgba(255,107,53,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.fl-info { flex: 1; }
+.fl-name { font-weight: 600; font-size: 14px; }
+.fl-exp { font-size: 12px; color: var(--text-secondary, #636e72); }
+.fl-skills { display: flex; flex-wrap: wrap; gap: 4px; }

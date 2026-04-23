@@ -49,6 +49,19 @@
                 </div>
               </div>
             </div>
+
+            <!-- Rating Summary -->
+            <div class="rating-summary">
+              @if (ratingSummary() && ratingSummary()!.totalRatings > 0) {
+                <div class="rating-row">
+                  <app-rating-stars [score]="ratingSummary()!.averageScore" [readonly]="true"></app-rating-stars>
+                  <span class="rating-value">{{ ratingSummary()!.averageScore | number:'1.1-1' }}</span>
+                  <span class="rating-count">({{ ratingSummary()!.totalRatings }} évaluation{{ ratingSummary()!.totalRatings !== 1 ? 's' : '' }})</span>
+                </div>
+              } @else {
+                <p class="no-ratings">{{ 'PROFILE.NO_RATINGS' | translate }}</p>
+              }
+            </div>
           }
         </mat-card-content>
       </mat-card>

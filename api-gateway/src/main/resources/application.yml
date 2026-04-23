@@ -15,7 +15,7 @@ spring:
         - id: project-service
           uri: http://project-service:8082
           predicates:
-            - Path=/api/projects/**, /api/applications/**, /api/contracts/**, /api/ratings/**
+            - Path=/api/projects/**, /api/applications/**, /api/contracts/**, /api/ratings/**, /api/match/**
 
       globalcors:
         corsConfigurations:

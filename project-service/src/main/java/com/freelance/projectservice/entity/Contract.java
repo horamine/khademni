@@ -3,6 +3,7 @@ package com.freelance.projectservice.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "contracts")
@@ -13,20 +14,37 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long applicationId;
-    private Long freelancerId;
-    private Long clientId;
+    @Column(nullable = false)
     private Long projectId;
+
+    @Column(nullable = false)
+    private Long applicationId;
+
+    @Column(nullable = false)
+    private Long clientId;
+
+    @Column(nullable = false)
+    private Long freelancerId;
 
     private LocalDate startDate;
     private LocalDate endDate;
 
-    private String status; // ACTIVE, COMPLETED, CANCELLED
+    @Enumerated(EnumType.STRING)
+    private ContractStatus status;
 
     private Double payment;
 
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     @PrePersist
     public void prePersist() {
-        if (status == null) status = "ACTIVE";
+        if (status == null) status = ContractStatus.PENDING;
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

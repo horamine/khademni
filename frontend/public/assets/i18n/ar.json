@@ -28,6 +28,8 @@
     "PROJECTS": "المشاريع",
     "APPLICATIONS": "الطلبات",
     "CONTRACTS": "العقود",
+    "CLIENT_CONTRACTS": "عقودي",
+    "FREELANCER_CONTRACTS": "عقودي",
     "LOGOUT": "تسجيل الخروج"
   },
   "LANDING": {
@@ -381,5 +383,41 @@
       "EMPTY_STATE_SUB": "لا توجد عقود على المنصة حتى الآن",
       "MANAGE_CONTRACTS": "إدارة العقود"
     }
+  },
+  "CLIENT": {
+    "CONTRACTS": {
+      "TITLE": "عقودي",
+      "SUBTITLE": "العقود مع المستقلين",
+      "CREATE": "إنشاء عقد",
+      "CREATE_TITLE": "إنشاء عقد جديد",
+      "COMPLETE": "وضع علامة مكتمل",
+      "RATE": "تقييم المستقل",
+      "RATE_FREELANCER": "تقييم المستقل",
+      "RATE_DESC": "كيف تقيّم هذا المستقل؟",
+      "COMMENT": "تعليق (اختياري)"
+    },
+    "RECOMMENDED_FREELANCERS": {
+      "TITLE": "المستقلون الموصى بهم",
+      "DESC": "أفضل 5 مستقلين لمشروعك"
+    }
+  },
+  "FREELANCER": {
+    "CONTRACTS": {
+      "TITLE": "عقودي",
+      "SUBTITLE": "عقودك مع العملاء",
+      "ACCEPT": "قبول",
+      "REJECT": "رفض"
+    }
+  },
+  "MATCH": {
+    "RECOMMENDED_FOR_YOU": "موصى بها لك",
+    "RECOMMENDATIONS_DESC": "أفضل 5 مشاريع تتناسب مع ملفك الشخصي",
+    "NO_RECOMMENDATIONS": "لا توجد توصيات متاحة",
+    "VIEW_PROJECT": "عرض المشروع",
+    "SCORE_LABEL": "درجة التوافق"
+  },
+  "PROFILE": {
+    "AVERAGE_RATING": "متوسط التقييم",
+    "NO_RATINGS": "لا توجد تقييمات بعد"
   }
 }

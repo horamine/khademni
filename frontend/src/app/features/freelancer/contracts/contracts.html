@@ -1,0 +1,74 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>description</mat-icon>
+      {{ 'FREELANCER.CONTRACTS.TITLE' | translate }}
+    </h1>
+    <p class="page-subtitle">{{ 'FREELANCER.CONTRACTS.SUBTITLE' | translate }}</p>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (contracts().length === 0) {
+    <mat-card class="empty-card">
+      <mat-card-content class="empty-content">
+        <mat-icon class="empty-icon">description</mat-icon>
+        <p>{{ 'CONTRACTS.EMPTY_STATE' | translate }}</p>
+        <span>{{ 'CONTRACTS.EMPTY_STATE_SUB' | translate }}</span>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <div class="contracts-list">
+      @for (contract of contracts(); track contract.id) {
+        <mat-card class="contract-card">
+          <mat-card-header>
+            <mat-card-title>
+              {{ contract.projectTitle || ('CONTRACTS.CONTRACT_ID' | translate) + contract.id }}
+            </mat-card-title>
+            <mat-card-subtitle>
+              Client #{{ contract.clientId }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="contract-details">
+              <div class="detail-row">
+                <mat-icon color="primary">event</mat-icon>
+                <span>{{ contract.startDate | date:'dd/MM/yyyy' }} → {{ contract.endDate | date:'dd/MM/yyyy' }}</span>
+              </div>
+              <div class="detail-row">
+                <mat-icon color="primary">monetization_on</mat-icon>
+                <span>{{ contract.payment | number }} MAD</span>
+              </div>
+              <div class="detail-row">
+                <mat-icon color="primary">info</mat-icon>
+                <span class="status-chip" [style.background]="getStatusColor(contract.status)">
+                  {{ 'STATUS.' + contract.status | translate }}
+                </span>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            @if (contract.status === ContractStatus.PENDING) {
+              <button mat-raised-button color="primary" (click)="acceptContract(contract)">
+                <mat-icon>check</mat-icon>
+                {{ 'FREELANCER.CONTRACTS.ACCEPT' | translate }}
+              </button>
+              <button mat-stroked-button color="warn" (click)="rejectContract(contract)">
+                <mat-icon>close</mat-icon>
+                {{ 'FREELANCER.CONTRACTS.REJECT' | translate }}
+              </button>
+            }
+            @if (contract.status === ContractStatus.ACTIVE) {
+              <button mat-stroked-button color="warn" (click)="cancelContract(contract)">
+                <mat-icon>cancel</mat-icon>
+                {{ 'CONTRACTS.CANCEL' | translate }}
+              </button>
+            }
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

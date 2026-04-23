@@ -7,10 +7,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslateModule } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../core/services/user.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { RatingService } from '../../../core/services/rating.service';
 import { Freelancer } from '../../../core/models/user.model';
+import { FreelancerRatingSummary } from '../../../core/models/rating.model';
+import { RatingStarsComponent } from '../../../shared/components/rating-stars/rating-stars';
 
 @Component({
   selector: 'app-freelancer-profile',
@@ -18,7 +22,8 @@ import { Freelancer } from '../../../core/models/user.model';
   imports: [
     CommonModule, ReactiveFormsModule,
     MatCardModule, MatButtonModule, MatIconModule,
-    MatFormFieldModule, MatInputModule, MatProgressSpinnerModule
+    MatFormFieldModule, MatInputModule, MatProgressSpinnerModule,
+    TranslateModule, RatingStarsComponent
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss'
@@ -26,12 +31,14 @@ import { Freelancer } from '../../../core/models/user.model';
 export class FreelancerProfileComponent implements OnInit {
   private readonly userService = inject(UserService);
   private readonly authService = inject(AuthService);
+  private readonly ratingService = inject(RatingService);
   private readonly toastr = inject(ToastrService);
   private readonly fb = inject(FormBuilder);
 
   readonly loading = signal(true);
   readonly saving = signal(false);
   readonly freelancer = signal<Freelancer | null>(null);
+  readonly ratingSummary = signal<FreelancerRatingSummary | null>(null);
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -53,12 +60,20 @@ export class FreelancerProfileComponent implements OnInit {
             availability: freelancer.availability ?? 0
           });
           this.loading.set(false);
+          this.loadRatingSummary(userId);
         },
         error: () => this.loading.set(false)
       });
     } else {
       this.loading.set(false);
     }
+  }
+
+  private loadRatingSummary(userId: number): void {
+    this.ratingService.getAverage(userId).subscribe({
+      next: (summary) => this.ratingSummary.set(summary),
+      error: () => {}
+    });
   }
 
   onSave(): void {
@@ -92,3 +107,4 @@ export class FreelancerProfileComponent implements OnInit {
     return name.split(' ').filter(w => w.length > 0).map(w => w[0]).join('').toUpperCase().slice(0, 2);
   }
 }
+

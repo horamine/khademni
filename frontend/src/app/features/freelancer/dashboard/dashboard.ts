@@ -5,26 +5,33 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
 import { TranslateModule } from '@ngx-translate/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { ApplicationService } from '../../../core/services/application.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatchService } from '../../../core/services/match.service';
 import { Application, ApplicationStatus } from '../../../core/models/application.model';
+import { RecommendedProject } from '../../../core/models/match.model';
+import { MatchScoreBadgeComponent } from '../../../shared/components/match-score-badge/match-score-badge';
 
 @Component({
   selector: 'app-freelancer-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatCardModule, MatIconModule, MatButtonModule, MatProgressSpinnerModule, TranslateModule, BaseChartDirective],
+  imports: [CommonModule, RouterLink, MatCardModule, MatIconModule, MatButtonModule, MatProgressSpinnerModule, MatChipsModule, TranslateModule, BaseChartDirective, MatchScoreBadgeComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
 export class FreelancerDashboardComponent implements OnInit {
   private readonly applicationService = inject(ApplicationService);
   private readonly authService = inject(AuthService);
+  private readonly matchService = inject(MatchService);
 
   readonly loading = signal(true);
   readonly applications = signal<Application[]>([]);
+  readonly recommendations = signal<RecommendedProject[]>([]);
+  readonly loadingRecommendations = signal(false);
 
   get totalApplications(): number { return this.applications().length; }
   get acceptedApplications(): number { return this.applications().filter(a => a.status === ApplicationStatus.ACCEPTED).length; }
@@ -72,9 +79,21 @@ export class FreelancerDashboardComponent implements OnInit {
         },
         error: () => this.loading.set(false)
       });
+      this.loadRecommendations(userId);
     } else {
       this.loading.set(false);
     }
+  }
+
+  private loadRecommendations(userId: number): void {
+    this.loadingRecommendations.set(true);
+    this.matchService.getRecommendedProjects(userId, 5).subscribe({
+      next: (recs) => {
+        this.recommendations.set(recs);
+        this.loadingRecommendations.set(false);
+      },
+      error: () => this.loadingRecommendations.set(false)
+    });
   }
 
   private updateCharts(apps: Application[]): void {
