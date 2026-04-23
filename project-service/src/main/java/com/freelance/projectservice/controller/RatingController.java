@@ -46,6 +46,6 @@ public class RatingController {
             if (userId instanceof Long) return (Long) userId;
             if (userId instanceof Integer) return ((Integer) userId).longValue();
         }
-        return 0L;
+        throw new org.springframework.security.access.AccessDeniedException("Utilisateur non authentifié.");
     }
 }

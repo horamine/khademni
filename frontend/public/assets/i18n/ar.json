@@ -414,7 +414,10 @@
     "RECOMMENDATIONS_DESC": "أفضل 5 مشاريع تتناسب مع ملفك الشخصي",
     "NO_RECOMMENDATIONS": "لا توجد توصيات متاحة",
     "VIEW_PROJECT": "عرض المشروع",
-    "SCORE_LABEL": "درجة التوافق"
+    "SCORE_LABEL": "درجة التوافق",
+    "SKILLS": "المهارات",
+    "EXPERIENCE": "الخبرة",
+    "AVAILABILITY": "التوفر"
   },
   "PROFILE": {
     "AVERAGE_RATING": "متوسط التقييم",

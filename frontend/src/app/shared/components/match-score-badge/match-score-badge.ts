@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateService } from '@ngx-translate/core';
 import { MatchScoreDto } from '../../../core/models/match.model';
 
 @Component({
@@ -50,6 +51,8 @@ export class MatchScoreBadgeComponent {
   @Input() score: number = 0;
   @Input() breakdown: MatchScoreDto | null = null;
 
+  private readonly translate = inject(TranslateService);
+
   get color(): string {
     if (this.score >= 75) return '#00B894';
     if (this.score >= 50) return '#FF6B35';
@@ -61,7 +64,11 @@ export class MatchScoreBadgeComponent {
   }
 
   get tooltipText(): string {
-    if (!this.breakdown) return `Score: ${this.score}`;
-    return `Score: ${this.score}\nSkills: ${this.breakdown.skillMatch}\nExpérience: ${this.breakdown.experienceFactor}\nDisponibilité: ${this.breakdown.availabilityFactor}`;
+    const scoreLabel = this.translate.instant('MATCH.SCORE_LABEL');
+    if (!this.breakdown) return `${scoreLabel}: ${this.score}`;
+    const skillsLabel = this.translate.instant('MATCH.SKILLS');
+    const expLabel = this.translate.instant('MATCH.EXPERIENCE');
+    const availLabel = this.translate.instant('MATCH.AVAILABILITY');
+    return `${scoreLabel}: ${this.score}\n${skillsLabel}: ${this.breakdown.skillMatch}\n${expLabel}: ${this.breakdown.experienceFactor}\n${availLabel}: ${this.breakdown.availabilityFactor}`;
   }
 }

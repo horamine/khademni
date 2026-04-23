@@ -415,7 +415,10 @@
     "RECOMMENDATIONS_DESC": "Top 5 projets correspondant à votre profil",
     "NO_RECOMMENDATIONS": "Aucune recommandation disponible",
     "VIEW_PROJECT": "Voir le projet",
-    "SCORE_LABEL": "Score de correspondance"
+    "SCORE_LABEL": "Score",
+    "SKILLS": "Compétences",
+    "EXPERIENCE": "Expérience",
+    "AVAILABILITY": "Disponibilité"
   },
   "PROFILE": {
     "AVERAGE_RATING": "Note moyenne",

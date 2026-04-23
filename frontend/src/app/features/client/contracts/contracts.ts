@@ -51,7 +51,6 @@ export class ClientContractsComponent implements OnInit {
   private loadRatings(contracts: Contract[]): void {
     const userId = this.authService.userId();
     if (!userId) return;
-    this.ratingService.getForFreelancer(0).subscribe(); // warm up
     // Check rated contracts via each contract's id - build a set
     const completedContracts = contracts.filter(c => c.status === ContractStatus.COMPLETED);
     if (completedContracts.length === 0) return;
