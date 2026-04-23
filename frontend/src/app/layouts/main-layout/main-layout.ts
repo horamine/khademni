@@ -69,6 +69,9 @@ export class MainLayout {
     return [
       { labelKey: 'SIDEBAR.DASHBOARD', icon: 'dashboard', route: '/admin/dashboard' },
       { labelKey: 'SIDEBAR.USERS', icon: 'manage_accounts', route: '/admin/users' },
+      { labelKey: 'SIDEBAR.PROJECTS', icon: 'folder', route: '/admin/projects' },
+      { labelKey: 'SIDEBAR.APPLICATIONS', icon: 'list_alt', route: '/admin/applications' },
+      { labelKey: 'SIDEBAR.CONTRACTS', icon: 'description', route: '/admin/contracts' },
     ];
   }
 

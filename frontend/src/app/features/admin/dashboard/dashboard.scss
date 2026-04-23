@@ -6,3 +6,34 @@
   font-weight: 600 !important;
 }
 
+.quick-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  color: white !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-users {
+  background: linear-gradient(135deg, #FF6B35, #e05a2a) !important;
+}
+
+.action-projects {
+  background: linear-gradient(135deg, #004E89, #003a6b) !important;
+}
+
+.action-applications {
+  background: linear-gradient(135deg, #00B894, #009d7e) !important;
+}
+
+.action-contracts {
+  background: linear-gradient(135deg, #6C5CE7, #5a4ed1) !important;
+}
+

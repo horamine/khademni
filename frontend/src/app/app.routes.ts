@@ -110,6 +110,21 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/admin/users/users').then((m) => m.AdminUsersComponent)
           },
+          {
+            path: 'projects',
+            loadComponent: () =>
+              import('./features/admin/projects/projects').then((m) => m.AdminProjectsComponent)
+          },
+          {
+            path: 'applications',
+            loadComponent: () =>
+              import('./features/admin/applications/applications').then((m) => m.AdminApplicationsComponent)
+          },
+          {
+            path: 'contracts',
+            loadComponent: () =>
+              import('./features/admin/contracts/contracts').then((m) => m.AdminContractsComponent)
+          },
           { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]
       },

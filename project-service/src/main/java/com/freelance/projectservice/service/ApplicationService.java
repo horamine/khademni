@@ -39,4 +39,8 @@ public class ApplicationService {
         return applicationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Application non trouvée !"));
     }
+
+    public List<Application> getAllApplications() {
+        return applicationRepository.findAll();
+    }
 }

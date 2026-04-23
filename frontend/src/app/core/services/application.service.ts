@@ -35,4 +35,8 @@ export class ApplicationService {
   reject(id: number): Observable<Application> {
     return this.updateStatus(id, ApplicationStatus.REJECTED);
   }
+
+  getAllAdmin(): Observable<Application[]> {
+    return this.http.get<Application[]>(`${this.apiUrl}/api/applications/admin/all`);
+  }
 }

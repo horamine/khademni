@@ -4,6 +4,7 @@ import com.freelance.projectservice.entity.Application;
 import com.freelance.projectservice.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,5 +40,11 @@ public class ApplicationController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(applicationService.updateApplicationStatus(id, status));
+    }
+
+    @GetMapping("/admin/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Application>> getAllApplications() {
+        return ResponseEntity.ok(applicationService.getAllApplications());
     }
 }

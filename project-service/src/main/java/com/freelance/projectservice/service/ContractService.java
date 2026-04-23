@@ -35,4 +35,8 @@ public class ContractService {
         contract.setStatus(status);
         return contractRepository.save(contract);
     }
+
+    public List<Contract> getAllContracts() {
+        return contractRepository.findAll();
+    }
 }

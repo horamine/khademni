@@ -1,0 +1,113 @@
+<div class="admin-page-container">
+  <div class="page-header">
+    <h1 class="page-title">
+      <mat-icon>folder</mat-icon>
+      {{ 'ADMIN.PROJECTS.TITLE' | translate }}
+    </h1>
+    <p class="page-subtitle">{{ 'ADMIN.PROJECTS.SUBTITLE' | translate }}</p>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <div class="filters-row">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>{{ 'ADMIN.PROJECTS.SEARCH' | translate }}</mat-label>
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ 'ADMIN.PROJECTS.FILTER_STATUS' | translate }}</mat-label>
+          <mat-select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+            @for (s of statuses; track s) {
+              <mat-option [value]="s">
+                {{ s ? ('STATUS.' + s | translate) : ('ADMIN.PROJECTS.ALL_STATUSES' | translate) }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  } @else if (filtered().length === 0) {
+    <mat-card class="empty-card">
+      <mat-card-content class="empty-content">
+        <mat-icon class="empty-icon">folder_off</mat-icon>
+        <p>{{ 'ADMIN.PROJECTS.EMPTY_STATE' | translate }}</p>
+        <span>{{ 'ADMIN.PROJECTS.EMPTY_STATE_SUB' | translate }}</span>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <mat-card class="table-card">
+      <mat-card-content>
+        <div class="table-responsive">
+          <table mat-table [dataSource]="filtered()" class="admin-table">
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.PROJECTS.ID' | translate }}</th>
+              <td mat-cell *matCellDef="let p">#{{ p.id }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="title">
+              <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.PROJECTS.TITLE_COL' | translate }}</th>
+              <td mat-cell *matCellDef="let p" class="title-cell">{{ p.title }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="clientId">
+              <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.PROJECTS.CLIENT' | translate }}</th>
+              <td mat-cell *matCellDef="let p">{{ p.clientId || '—' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.PROJECTS.STATUS' | translate }}</th>
+              <td mat-cell *matCellDef="let p">
+                <span class="status-chip" [style.background]="getStatusColor(p.status)">
+                  {{ 'STATUS.' + p.status | translate }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="budget">
+              <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.PROJECTS.BUDGET' | translate }}</th>
+              <td mat-cell *matCellDef="let p">{{ p.budget | number }} MAD</td>
+            </ng-container>
+
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.PROJECTS.CREATED_AT' | translate }}</th>
+              <td mat-cell *matCellDef="let p">{{ p.createdAt | date:'dd/MM/yy' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.PROJECTS.ACTIONS' | translate }}</th>
+              <td mat-cell *matCellDef="let p">
+                <div class="action-btns">
+                  <button mat-icon-button color="primary"
+                    matTooltip="{{ 'ADMIN.PROJECTS.DELETE' | translate }}"
+                    [disabled]="deletingId() === p.id"
+                    (click)="deleteProject(p)">
+                    @if (deletingId() === p.id) {
+                      <mat-spinner diameter="18"></mat-spinner>
+                    } @else {
+                      <mat-icon>delete</mat-icon>
+                    }
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+        <div class="table-footer">
+          {{ filtered().length }} {{ filtered().length === 1 ? 'projet' : 'projets' }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

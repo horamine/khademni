@@ -28,4 +28,8 @@ export class ContractService {
   updateStatus(id: number, status: ContractStatus): Observable<Contract> {
     return this.http.put<Contract>(`${this.apiUrl}/api/contracts/${id}/status`, { status });
   }
+
+  getAll(): Observable<Contract[]> {
+    return this.http.get<Contract[]>(`${this.apiUrl}/api/contracts`);
+  }
 }

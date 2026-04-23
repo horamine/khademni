@@ -10,8 +10,10 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { UserService } from '../../../core/services/user.service';
 import { ProjectService } from '../../../core/services/project.service';
+import { ContractService } from '../../../core/services/contract.service';
 import { User, Role } from '../../../core/models/user.model';
 import { Project, ProjectStatus } from '../../../core/models/project.model';
+import { Contract, ContractStatus } from '../../../core/models/application.model';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -23,16 +25,21 @@ import { Project, ProjectStatus } from '../../../core/models/project.model';
 export class AdminDashboardComponent implements OnInit {
   private readonly userService = inject(UserService);
   private readonly projectService = inject(ProjectService);
+  private readonly contractService = inject(ContractService);
 
   readonly loading = signal(true);
   readonly users = signal<User[]>([]);
   readonly projects = signal<Project[]>([]);
+  readonly contracts = signal<Contract[]>([]);
 
   get totalUsers(): number { return this.users().length; }
   get totalFreelancers(): number { return this.users().filter(u => u.role === Role.FREELANCER).length; }
   get totalClients(): number { return this.users().filter(u => u.role === Role.CLIENT).length; }
   get totalProjects(): number { return this.projects().length; }
   get openProjects(): number { return this.projects().filter(p => p.status === ProjectStatus.OPEN).length; }
+  get totalContracts(): number { return this.contracts().length; }
+  get activeContracts(): number { return this.contracts().filter(c => c.status === ContractStatus.ACTIVE).length; }
+  get completedContracts(): number { return this.contracts().filter(c => c.status === ContractStatus.COMPLETED).length; }
 
   // Bar chart — users by role
   usersBarData: ChartData<'bar'> = {
@@ -84,9 +91,20 @@ export class AdminDashboardComponent implements OnInit {
     cutout: '65%'
   };
 
+  // Donut — contracts by status
+  contractsDonutData: ChartData<'doughnut'> = {
+    labels: ['Actif', 'Terminé', 'Annulé'],
+    datasets: [{ data: [0, 0, 0], backgroundColor: ['#004E89', '#00B894', '#E74C3C'], borderWidth: 0 }]
+  };
+  contractsDonutOptions: ChartConfiguration<'doughnut'>['options'] = {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom' } },
+    cutout: '65%'
+  };
+
   ngOnInit(): void {
     let loaded = 0;
-    const done = () => { if (++loaded === 2) this.loading.set(false); };
+    const done = () => { if (++loaded === 3) this.loading.set(false); };
 
     this.userService.getAllUsers().subscribe({
       next: (users) => {
@@ -112,6 +130,21 @@ export class AdminDashboardComponent implements OnInit {
         this.projectsDonutData = {
           ...this.projectsDonutData,
           datasets: [{ ...this.projectsDonutData.datasets[0], data: [open, inProg, done2] }]
+        };
+        done();
+      },
+      error: done
+    });
+
+    this.contractService.getAll().subscribe({
+      next: (contracts) => {
+        this.contracts.set(contracts);
+        const active = contracts.filter(c => c.status === ContractStatus.ACTIVE).length;
+        const completed = contracts.filter(c => c.status === ContractStatus.COMPLETED).length;
+        const cancelled = contracts.filter(c => c.status === ContractStatus.CANCELLED).length;
+        this.contractsDonutData = {
+          ...this.contractsDonutData,
+          datasets: [{ ...this.contractsDonutData.datasets[0], data: [active, completed, cancelled] }]
         };
         done();
       },
